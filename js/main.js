@@ -27,7 +27,6 @@ var getLastElementOfClass = function (parent, childClass) {
   return parent.querySelector(childClass + ':last-child');
 };
 
-
 var getElementWidth = function (element) {
   var elementWidth = window.getComputedStyle(element, null).width;
   return parseInt(elementWidth, 10);
@@ -52,8 +51,6 @@ var createRandomArray = function (array) {
   }
   return newArray;
 };
-
-var pinWidth = 0;
 
 var createApartments = function (elementsQuantity) {
   var apartmentsArray = [];
@@ -115,7 +112,7 @@ var getPinWidth = function () {
   return width;
 };
 
-pinWidth = getPinWidth();
+var pinWidth = getPinWidth();
 
 var renderPins = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -129,4 +126,3 @@ var apartments = createApartments(apartmentQuantity);
 renderPins(apartments);
 
 map.classList.remove('map--faded');
-
