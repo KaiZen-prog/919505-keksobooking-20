@@ -12,7 +12,6 @@ var MAX_ROOMS = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 
-var PIN_MIN_X = 0;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
 
@@ -24,14 +23,17 @@ var map = document.querySelector('.map');
 
 var fragment = document.createDocumentFragment();
 
+var getLastElementOfClass = function (parent, childClass) {
+  return parent.querySelector(childClass + ':last-child');
+};
+
+
 var getElementWidth = function (element) {
-  var elementWidth = window.getComputedStyle(element, null).getPropertyValue('width');
+  var elementWidth = window.getComputedStyle(element, null).width;
   return parseInt(elementWidth, 10);
 };
 
-var pinMaxX = getElementWidth(mapPins);
-var pinWidth = 0;
-
+var mapWidth = getElementWidth(mapPins);
 
 var getRandomArrayElement = function (array) {
   var rand = Math.floor(Math.random() * array.length);
@@ -50,6 +52,8 @@ var createRandomArray = function (array) {
   }
   return newArray;
 };
+
+var pinWidth = 0;
 
 var createApartments = function (elementsQuantity) {
   var apartmentsArray = [];
@@ -74,7 +78,7 @@ var createApartments = function (elementsQuantity) {
       },
 
       location: {
-        x: getRandomNumber(PIN_MIN_X + pinWidth, pinMaxX - pinWidth),
+        x: getRandomNumber(0, mapWidth - pinWidth),
         y: getRandomNumber(PIN_MIN_Y, PIN_MAX_Y),
       }
     };
@@ -83,20 +87,16 @@ var createApartments = function (elementsQuantity) {
   return apartmentsArray;
 };
 
-var createPin = function (object) {
+var createPin = function (entity) {
   var pin = pinTemplate.cloneNode(true);
-  pin.style.left = object.location.x + 'px';
-  pin.style.top = object.location.y + 'px';
+  pin.style.left = entity.location.x + 'px';
+  pin.style.top = entity.location.y + 'px';
 
   var pinImg = pin.querySelector('img');
-  pinImg.src = object.author.avatar;
-  pinImg.alt = object.offer.title;
+  pinImg.src = entity.author.avatar;
+  pinImg.alt = entity.offer.title;
 
   return pin;
-};
-
-var getLastElementOfClass = function (parent, childClass) {
-  return parent.querySelector(childClass + ':last-child');
 };
 
 // Определяем ширину генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его ширину, удаляем пин.
@@ -115,6 +115,8 @@ var getPinWidth = function () {
   return width;
 };
 
+pinWidth = getPinWidth();
+
 var renderPins = function (array) {
   for (var i = 0; i < array.length; i++) {
     var pin = createPin(array[i]);
@@ -123,7 +125,6 @@ var renderPins = function (array) {
   mapPins.appendChild(fragment);
 };
 
-pinWidth = getPinWidth();
 var apartments = createApartments(apartmentQuantity);
 renderPins(apartments);
 
