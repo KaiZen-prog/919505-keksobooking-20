@@ -14,11 +14,15 @@ var MAX_GUESTS = 10;
 
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
+var MAIN_PIN_END_HEIGHT = 22;
+
+var KEY_CODE_MOUSE_LEFT = 0;
+var KEY_CODE_ENTER = 13;
 
 var apartmentQuantity = 8;
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+// var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var mapPins = document.querySelector('.map__pins');
 var map = document.querySelector('.map');
@@ -33,6 +37,21 @@ var getElementWidth = function (element) {
   var elementWidth = window.getComputedStyle(element, null).width;
   return parseInt(elementWidth, 10);
 };
+
+var getElementHeight = function (element) {
+  var elementHeight = window.getComputedStyle(element, null).height;
+  return parseInt(elementHeight, 10);
+};
+
+var getElementTop = function (element) {
+  var elementTop = window.getComputedStyle(element, null).top;
+  return parseInt(elementTop, 10);
+};
+var getElementLeft = function (element) {
+  var elementLeft = window.getComputedStyle(element, null).left;
+  return parseInt(elementLeft, 10);
+};
+
 
 var mapWidth = getElementWidth(mapPins);
 
@@ -76,8 +95,8 @@ var createApartments = function (elementsQuantity) {
       },
 
       location: {
-        x: getRandomNumber(0, mapWidth - pinWidth),
-        y: getRandomNumber(PIN_MIN_Y, PIN_MAX_Y),
+        x: getRandomNumber(-1 * (pinWidth / 2), mapWidth - (pinWidth / 2)),
+        y: getRandomNumber(PIN_MIN_Y, PIN_MAX_Y)
       },
     };
     apartment.offer.address = apartment.location.x + ', ' + apartment.location.y;
@@ -88,8 +107,8 @@ var createApartments = function (elementsQuantity) {
 
 var createPin = function (entity) {
   var pin = pinTemplate.cloneNode(true);
-  pin.style.left = entity.location.x + 'px';
-  pin.style.top = entity.location.y + 'px';
+  pin.style.left = (entity.location.x - (pinWidth / 2)) + 'px';
+  pin.style.top = (entity.location.y - pinHeight) + 'px';
 
   var pinImg = pin.querySelector('img');
   pinImg.src = entity.author.avatar;
@@ -98,9 +117,12 @@ var createPin = function (entity) {
   return pin;
 };
 
-// Определяем ширину генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его ширину, удаляем пин.
-// Последующие пины будем генерировать уже с учетом полученной ширины.
-var getPinWidth = function () {
+// Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
+// Последующие пины будем генерировать уже с учетом полученных размеров.
+var pinWidth;
+var pinHeight;
+
+var getPinSizes = function () {
   var apartment = createApartments(1);
   var pin = createPin(apartment[0]);
 
@@ -108,14 +130,13 @@ var getPinWidth = function () {
   mapPins.appendChild(fragment);
 
   var mapPin = getLastElementOfClass(mapPins, '.map__pin');
-  var width = getElementWidth(mapPin);
+  pinWidth = getElementWidth(mapPin);
+  pinHeight = getElementHeight(mapPin);
 
   mapPin.parentNode.removeChild(mapPin);
-
-  return width;
 };
 
-var pinWidth = getPinWidth();
+getPinSizes();
 
 var renderPins = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -125,7 +146,7 @@ var renderPins = function (array) {
   mapPins.appendChild(fragment);
 };
 
-var createCard = function (entity) {
+/* var createCard = function (entity) {
   var card = cardTemplate.cloneNode(true);
 
   var title = card.querySelector('.popup__title');
@@ -236,12 +257,65 @@ var createCard = function (entity) {
   avatar.src = entity.author.avatar;
 
   return card;
+};*/
+
+var mainPin = document.querySelector('.map__pin--main');
+
+var getPinAddress = function (pin, isPointyEnd) {
+  var width = getElementWidth(pin);
+  var height = getElementHeight(pin);
+
+  var pinAddressX = Math.floor(getElementLeft(pin) + width / 2);
+
+  if (isPointyEnd) {
+    var pinAddressY = Math.floor(getElementTop(pin) + height + MAIN_PIN_END_HEIGHT);
+  } else {
+    pinAddressY = Math.floor(getElementTop(pin) + height / 2);
+  }
+
+  return pinAddressX + ', ' + pinAddressY;
 };
 
-var apartments = createApartments(apartmentQuantity);
-renderPins(apartments);
+var adForm = document.querySelector('.ad-form');
+var fieldsets = adForm.querySelectorAll('fieldset');
+var addressInput = adForm.querySelector('input[name="address"]');
 
-var card = createCard(apartments[0]);
-map.insertBefore(card, document.querySelector('.map__filters-container'));
+var openMap = function () {
+  mainPin.removeEventListener('mousedown', onMainPinMousedown);
 
-map.classList.remove('map--faded');
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+
+  var apartments = createApartments(apartmentQuantity);
+  renderPins(apartments);
+
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled');
+  }
+
+  addressInput.value = getPinAddress(mainPin, true);
+
+  // var card = createCard(apartments[0]);
+  // map.insertBefore(card, document.querySelector('.map__filters-container'));
+};
+
+var onMainPinMousedown = function (evt) {
+  if (evt.button === KEY_CODE_MOUSE_LEFT) {
+    openMap();
+  }
+};
+
+var onMainPinKeydown = function (evt) {
+  if (evt.keyCode === KEY_CODE_ENTER) {
+    openMap();
+  }
+};
+
+addressInput.value = getPinAddress(mainPin, false);
+
+for (var i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].setAttribute('disabled', 'disabled');
+}
+
+mainPin.addEventListener('mousedown', onMainPinMousedown);
+mainPin.addEventListener('keydown', onMainPinKeydown);
