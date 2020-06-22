@@ -95,7 +95,7 @@ var createApartments = function (elementsQuantity) {
       },
 
       location: {
-        x: getRandomNumber(-1 * (pinWidth / 2), mapWidth - (pinWidth / 2)),
+        x: getRandomNumber(0, mapWidth),
         y: getRandomNumber(PIN_MIN_Y, PIN_MAX_Y)
       },
     };
