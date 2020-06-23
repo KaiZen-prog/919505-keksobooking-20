@@ -146,6 +146,7 @@ var renderPins = function (array) {
   mapPins.appendChild(fragment);
 };
 
+// Генерация карточек апартаментов. Закомментирована до следующих заданий
 /* var createCard = function (entity) {
   var card = cardTemplate.cloneNode(true);
 
@@ -319,3 +320,64 @@ for (var i = 0; i < fieldsets.length; i++) {
 
 mainPin.addEventListener('mousedown', onMainPinMousedown);
 mainPin.addEventListener('keydown', onMainPinKeydown);
+
+var roomsSelect = adForm.querySelector('#room_number');
+var guestsSelect = adForm.querySelector('#capacity');
+
+// Предупреждение о неподходящих вариантах комнат
+// var guestsOptions = guestsSelect.querySelectorAll('option');
+var onFilterChange = function () {
+  var rooms = roomsSelect.value;
+  var guests = guestsSelect.value;
+  if ((rooms === '100') && (guests !== '0')) {
+    guestsSelect.setCustomValidity('Вы выбрали 100 комнат. Подходящим вариантом для них является: "не для гостей"');
+    roomsSelect.setCustomValidity('');
+  } else {
+    if (rooms < guests) {
+      guestsSelect.setCustomValidity('Вы выбрали слишком много гостей для вашего количества комнат');
+      roomsSelect.setCustomValidity('');
+    } else {
+      if ((guests === '0') && (rooms !== '100')) {
+        roomsSelect.setCustomValidity('Для вашего числа гостей подойдет только 100 комнат');
+        guestsSelect.setCustomValidity('');
+      } else {
+        guestsSelect.setCustomValidity('');
+        roomsSelect.setCustomValidity('');
+      }
+    }
+  }
+};
+
+// Блокировка неподходящих вариантов комнат
+
+/* var disableRoomsOptions = function (rooms) {
+  if (rooms === '100') {
+    for (i = 0; i < guestsOptions.length; i++) {
+      if (guestsOptions[i].value !== '0') {
+        guestsOptions[i].setAttribute('disabled', 'disabled');
+
+        if (guestsSelect.value === guestsOptions[i].value) {
+        }
+      } else {
+        guestsOptions[i].removeAttribute('disabled');
+      }
+    }
+    if (roomsSelect.value)
+  } else {
+    for (i = 0; i < guestsOptions.length; i++) {
+      if ((rooms < guestsOptions[i].value) || (guestsOptions[i].value === '0')) {
+        guestsOptions[i].setAttribute('disabled', 'disabled');
+
+        if (guestsSelect.value === guestsOptions[i].value) {
+        }
+      } else {
+        guestsOptions[i].removeAttribute('disabled');
+      }
+    }
+  }
+};
+
+// disableRoomsOptions(roomsSelect.value);*/
+roomsSelect.addEventListener('change', onFilterChange);
+guestsSelect.addEventListener('change', onFilterChange);
+
