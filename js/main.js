@@ -99,28 +99,17 @@ var createApartments = function (elementsQuantity) {
 
 // Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
 // Последующие пины будем генерировать уже с учетом полученных размеров.
-var pinSizes = {
-  width: 0,
-  height: 0
-};
-
-var createPin = function (entity) {
-  var pin = pinTemplate.cloneNode(true);
-  pin.style.left = (entity.location.x - (pinSizes.width / 2)) + 'px';
-  pin.style.top = (entity.location.y - pinSizes.height) + 'px';
-
-  var pinImg = pin.querySelector('img');
-  pinImg.src = entity.author.avatar;
-  pinImg.alt = entity.offer.title;
-
-  return pin;
-};
-
 var getPinSizes = function () {
   var apartment = createApartments(1);
-  var pin = createPin(apartment[0]);
+  var firstPin = pinTemplate.cloneNode(true);
+  firstPin.style.left = (apartment[0].location.x) + 'px';
+  firstPin.style.top = (apartment[0].location.y) + 'px';
 
-  fragment.appendChild(pin);
+  var pinImg = firstPin.querySelector('img');
+  pinImg.src = apartment[0].author.avatar;
+  pinImg.alt = apartment[0].offer.title;
+
+  fragment.appendChild(firstPin);
   mapPins.appendChild(fragment);
 
   var mapPin = getLastElementOfClass(mapPins, '.map__pin');
@@ -136,7 +125,19 @@ var getPinSizes = function () {
   };
 };
 
-pinSizes = getPinSizes();
+var pinSizes = getPinSizes();
+
+var createPin = function (entity) {
+  var pin = pinTemplate.cloneNode(true);
+  pin.style.left = (entity.location.x - (pinSizes.width / 2)) + 'px';
+  pin.style.top = (entity.location.y - pinSizes.height) + 'px';
+
+  var pinImg = pin.querySelector('img');
+  pinImg.src = entity.author.avatar;
+  pinImg.alt = entity.offer.title;
+
+  return pin;
+};
 
 var renderPins = function (array) {
   for (var i = 0; i < array.length; i++) {
