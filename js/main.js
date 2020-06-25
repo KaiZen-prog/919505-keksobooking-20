@@ -31,11 +31,11 @@ var getLastElementOfClass = function (parent, childClass) {
   return parent.querySelector(childClass + ':last-child');
 };
 
-var getElementProperties = function (element, pseudoElement) {
-  var elementWidth = window.getComputedStyle(element, pseudoElement).width;
-  var elementHeight = window.getComputedStyle(element, pseudoElement).height;
-  var elementTop = window.getComputedStyle(element, pseudoElement).top;
-  var elementLeft = window.getComputedStyle(element, pseudoElement).left;
+var getElementProperties = function (element) {
+  var elementWidth = window.getComputedStyle(element).width;
+  var elementHeight = window.getComputedStyle(element).height;
+  var elementTop = window.getComputedStyle(element).top;
+  var elementLeft = window.getComputedStyle(element).left;
 
   return {
     width: parseInt(elementWidth, 10),
@@ -45,7 +45,7 @@ var getElementProperties = function (element, pseudoElement) {
   };
 };
 
-var mapWidth = getElementProperties(mapPins, null).width;
+var mapWidth = getElementProperties(mapPins).width;
 
 var getRandomArrayElement = function (array) {
   var rand = Math.floor(Math.random() * array.length);
@@ -97,6 +97,11 @@ var createApartments = function (elementsQuantity) {
   return apartmentsArray;
 };
 
+// Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
+// Последующие пины будем генерировать уже с учетом полученных размеров.
+var pinWidth = 0;
+var pinHeight = 0;
+
 var createPin = function (entity) {
   var pin = pinTemplate.cloneNode(true);
   pin.style.left = (entity.location.x - (pinWidth / 2)) + 'px';
@@ -109,11 +114,6 @@ var createPin = function (entity) {
   return pin;
 };
 
-// Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
-// Последующие пины будем генерировать уже с учетом полученных размеров.
-var pinWidth;
-var pinHeight;
-
 var getPinSizes = function () {
   var apartment = createApartments(1);
   var pin = createPin(apartment[0]);
@@ -122,8 +122,8 @@ var getPinSizes = function () {
   mapPins.appendChild(fragment);
 
   var mapPin = getLastElementOfClass(mapPins, '.map__pin');
-  pinWidth = getElementProperties(mapPin, null).width;
-  pinHeight = getElementProperties(mapPin, null).height;
+  pinWidth = getElementProperties(mapPin).width;
+  pinHeight = getElementProperties(mapPin).height;
 
   mapPin.parentNode.removeChild(mapPin);
 };
@@ -141,15 +141,15 @@ var renderPins = function (array) {
 var mainPin = document.querySelector('.map__pin--main');
 
 var getPinAddress = function (pin, isPointyEnd) {
-  var width = getElementProperties(pin, null).width;
-  var height = getElementProperties(pin, null).height;
-  var left = getElementProperties(pin, null).left;
-  var top = getElementProperties(pin, null).top;
+  var width = getElementProperties(pin).width;
+  var height = getElementProperties(pin).height;
+  var left = getElementProperties(pin).left;
+  var top = getElementProperties(pin).top;
 
   var pinAddressX = Math.floor(left + width / 2);
 
   if (isPointyEnd) {
-    var pinPointyEndHeight = getElementProperties(pin, 'after').height;
+    var pinPointyEndHeight = parseInt(window.getComputedStyle(pin, 'after').height, 10);
     var pinAddressY = Math.floor(top + height + pinPointyEndHeight);
   } else {
     pinAddressY = Math.floor(top + height / 2);
@@ -159,7 +159,7 @@ var getPinAddress = function (pin, isPointyEnd) {
 };
 
 var adForm = document.querySelector('.ad-form');
-var fieldsets = adForm.querySelectorAll('fieldset');
+var fieldsetCollection = adForm.querySelectorAll('fieldset');
 var addressInput = adForm.querySelector('input[name="address"]');
 
 var openMap = function () {
@@ -171,8 +171,8 @@ var openMap = function () {
   var apartments = createApartments(apartmentQuantity);
   renderPins(apartments);
 
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].removeAttribute('disabled');
+  for (var i = 0; i < fieldsetCollection.length; i++) {
+    fieldsetCollection[i].disabled = false;
   }
 
   addressInput.value = getPinAddress(mainPin, true);
@@ -192,8 +192,8 @@ var onMainPinKeydown = function (evt) {
 
 addressInput.value = getPinAddress(mainPin, false);
 
-for (var i = 0; i < fieldsets.length; i++) {
-  fieldsets[i].setAttribute('disabled', 'disabled');
+for (var i = 0; i < fieldsetCollection.length; i++) {
+  fieldsetCollection[i].disabled = true;
 }
 
 mainPin.addEventListener('mousedown', onMainPinMousedown);
@@ -203,19 +203,18 @@ var roomsSelect = adForm.querySelector('#room_number');
 var guestsSelect = adForm.querySelector('#capacity');
 
 // Предупреждение о неподходящих вариантах комнат
-// var guestsOptions = guestsSelect.querySelectorAll('option');
 var onFilterChange = function () {
-  var rooms = roomsSelect.value;
-  var guests = guestsSelect.value;
-  if ((rooms === '100') && (guests !== '0')) {
+  var selectedRoomsOption = roomsSelect.value;
+  var selectedGuestsOption = guestsSelect.value;
+  if ((selectedRoomsOption === '100') && (selectedGuestsOption !== '0')) {
     guestsSelect.setCustomValidity('Вы выбрали 100 комнат. Подходящим вариантом для них является: "не для гостей"');
     roomsSelect.setCustomValidity('');
   } else {
-    if (rooms < guests) {
+    if (selectedRoomsOption < selectedGuestsOption) {
       guestsSelect.setCustomValidity('Вы выбрали слишком много гостей для вашего количества комнат');
       roomsSelect.setCustomValidity('');
     } else {
-      if ((guests === '0') && (rooms !== '100')) {
+      if ((selectedGuestsOption === '0') && (selectedRoomsOption !== '100')) {
         roomsSelect.setCustomValidity('Для вашего числа гостей подойдет только 100 комнат');
         guestsSelect.setCustomValidity('');
       } else {
