@@ -29,10 +29,6 @@ var map = document.querySelector('.map');
 
 var fragment = document.createDocumentFragment();
 
-var getLastElementOfClass = function (parent, childClass) {
-  return parent.querySelector(childClass + ':last-child');
-};
-
 var getElementProperties = function (element) {
   var elementWidth = window.getComputedStyle(element).width;
   var elementHeight = window.getComputedStyle(element).height;
@@ -116,7 +112,8 @@ var getPinSizes = function () {
   fragment.appendChild(firstPin);
   mapPins.appendChild(fragment);
 
-  var mapPin = getLastElementOfClass(mapPins, '.map__pin');
+  var mapPinsCollection = mapPins.querySelectorAll('.map__pin');
+  var mapPin = mapPinsCollection[mapPinsCollection.length - 1];
 
   var pinWidth = getElementProperties(mapPin).width;
   var pinHeight = getElementProperties(mapPin).height;
@@ -465,14 +462,10 @@ var onCardCloseKeydown = function (evt) {
 };
 
 var onMapPinClick = function (evt) {
-  var previousCard = map.querySelector('article');
+  var cards = map.querySelectorAll('article');
 
-  if (previousCard) {
-    var previousCardNumber = getIntegerFromElementID(previousCard.id);
-    var previousPin = map.querySelector('#pin' + previousCardNumber);
-
-    previousPin.addEventListener('click', onMapPinClick);
-    previousCard.remove();
+  for (i = 0; i < cards.length; i++) {
+    cards[i].remove();
   }
 
   var pinNumber = getIntegerFromElementID(evt.currentTarget.id);
@@ -482,7 +475,4 @@ var onMapPinClick = function (evt) {
 
   cardCloseButton.addEventListener('click', onCardCloseClick);
   document.addEventListener('keydown', onCardCloseKeydown);
-
-  var pin = map.querySelector('#pin' + pinNumber);
-  pin.removeEventListener('click', onMapPinClick);
 };
