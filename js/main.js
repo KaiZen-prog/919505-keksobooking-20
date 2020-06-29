@@ -176,49 +176,38 @@ var getPinAddress = function (pin, isPointyEnd) {
 var adForm = document.querySelector('.ad-form');
 var fieldsetCollection = adForm.querySelectorAll('fieldset');
 var addressInput = adForm.querySelector('input[name="address"]');
-
-var openMap = function () {
-  mainPin.removeEventListener('mousedown', onMainPinMousedown);
-
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  renderPins(apartments);
-
-  for (var i = 0; i < fieldsetCollection.length; i++) {
-    fieldsetCollection[i].disabled = false;
-  }
-
-  addressInput.value = getPinAddress(mainPin, true);
-  var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-  for (i = 0; i < pins.length; i++) {
-    pins[i].addEventListener('click', onMapPinClick);
-  }
-};
-
-var onMainPinMousedown = function (evt) {
-  if (evt.button === KEY_CODE_MOUSE_LEFT) {
-    openMap();
-  }
-};
-
-var onMainPinKeydown = function (evt) {
-  if (evt.keyCode === KEY_CODE_ENTER) {
-    openMap();
-  }
-};
-
-addressInput.value = getPinAddress(mainPin, false);
-
-for (var i = 0; i < fieldsetCollection.length; i++) {
-  fieldsetCollection[i].disabled = true;
-}
-
-mainPin.addEventListener('mousedown', onMainPinMousedown);
-mainPin.addEventListener('keydown', onMainPinKeydown);
-
 var roomsSelect = adForm.querySelector('#room_number');
 var guestsSelect = adForm.querySelector('#capacity');
+var housingTypeSelect = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+var timeInSelect = adForm.querySelector('#timein');
+var timeOutSelect = adForm.querySelector('#timeout');
+
+var onHousingTypeChange = function () {
+  var housingType = housingTypeSelect.value;
+
+  switch (housingType) {
+    case 'bungalo':
+      priceInput.setAttribute('min', '0');
+      priceInput.setAttribute('placeholder', '0');
+      break;
+
+    case 'flat':
+      priceInput.setAttribute('min', '1000');
+      priceInput.setAttribute('placeholder', '1000');
+      break;
+
+    case 'house':
+      priceInput.setAttribute('min', '5000');
+      priceInput.setAttribute('placeholder', '5000');
+      break;
+
+    case 'palace':
+      priceInput.setAttribute('min', '10000');
+      priceInput.setAttribute('placeholder', '10000');
+      break;
+  }
+};
 
 // Предупреждение о неподходящих вариантах комнат
 var onFilterChange = function () {
@@ -242,6 +231,93 @@ var onFilterChange = function () {
     }
   }
 };
+
+var onTimeInChange = function () {
+  var timeIn = timeInSelect.value;
+
+  switch (timeIn) {
+    case '12:00':
+      timeOutSelect.value = timeIn;
+      break;
+
+    case '13:00':
+      timeOutSelect.value = timeIn;
+      break;
+
+    case '14:00':
+      timeOutSelect.value = timeIn;
+      break;
+  }
+};
+
+var onTimeOutChange = function () {
+  var timeOut = timeOutSelect.value;
+
+  switch (timeOut) {
+    case '12:00':
+      timeInSelect.value = timeOut;
+      break;
+
+    case '13:00':
+      timeInSelect.value = timeOut;
+      break;
+
+    case '14:00':
+      timeInSelect.value = timeOut;
+      break;
+  }
+};
+
+var openMap = function () {
+  mainPin.removeEventListener('mousedown', onMainPinMousedown);
+
+  map.classList.remove('map--faded');
+  renderPins(apartments);
+
+  for (var i = 0; i < fieldsetCollection.length; i++) {
+    fieldsetCollection[i].disabled = false;
+  }
+
+  addressInput.value = getPinAddress(mainPin, true);
+  var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+  for (i = 0; i < pins.length; i++) {
+    pins[i].addEventListener('click', onMapPinClick);
+  }
+
+  adForm.classList.remove('ad-form--disabled');
+
+  roomsSelect.addEventListener('change', onFilterChange);
+  guestsSelect.addEventListener('change', onFilterChange);
+  housingTypeSelect.addEventListener('change', onHousingTypeChange);
+  timeInSelect.addEventListener('change', onTimeInChange);
+  timeOutSelect.addEventListener('change', onTimeOutChange);
+
+  // Изначально тип выбранного жилья и минимальная цена за ночь не соответствуют друг другу.
+  // Приводим в соответствие.
+  onHousingTypeChange();
+};
+
+var onMainPinMousedown = function (evt) {
+  if (evt.button === KEY_CODE_MOUSE_LEFT) {
+    openMap();
+  }
+};
+
+var onMainPinKeydown = function (evt) {
+  if (evt.keyCode === KEY_CODE_ENTER) {
+    openMap();
+  }
+};
+
+addressInput.value = getPinAddress(mainPin, false);
+
+for (var i = 0; i < fieldsetCollection.length; i++) {
+  fieldsetCollection[i].disabled = true;
+}
+
+mainPin.addEventListener('mousedown', onMainPinMousedown);
+mainPin.addEventListener('keydown', onMainPinKeydown);
 
 // Генерация карточек апартаментов. Закомментирована до следующих заданий
 var createCard = function (entity, cardId) {
@@ -359,6 +435,8 @@ var createCard = function (entity, cardId) {
   return card;
 };
 
+// Для автоматически генерируемых элементов мы используем id типа pin1, pin2 и т.д.
+// Данная функция возвращает число из произвольного id, которое можно будет использовать как порядковый номер элемента.
 var getIntegerFromElementID = function (elementId) {
   var r = /\d+/;
   return elementId.match(r);
@@ -408,6 +486,3 @@ var onMapPinClick = function (evt) {
   var pin = map.querySelector('#pin' + pinNumber);
   pin.removeEventListener('click', onMapPinClick);
 };
-
-roomsSelect.addEventListener('change', onFilterChange);
-guestsSelect.addEventListener('change', onFilterChange);
