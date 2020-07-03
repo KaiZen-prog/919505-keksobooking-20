@@ -5,7 +5,7 @@
   var KEY_CODE_ENTER = 13;
   var KEY_CODE_ESCAPE = 27;
 
-  window.util = {
+  window.utils = {
     mapPins: document.querySelector('.map__pins'),
     mainPin: document.querySelector('.map__pin--main'),
 
@@ -25,6 +25,20 @@
         newArray.push(array[i]);
       }
       return newArray;
+    },
+
+    getElementProperties: function (element) {
+      var elementWidth = window.getComputedStyle(element).width;
+      var elementHeight = window.getComputedStyle(element).height;
+      var elementTop = window.getComputedStyle(element).top;
+      var elementLeft = window.getComputedStyle(element).left;
+
+      return {
+        width: parseInt(elementWidth, 10),
+        height: parseInt(elementHeight, 10),
+        top: parseInt(elementTop, 10),
+        left: parseInt(elementLeft, 10)
+      };
     },
 
     // Для автоматически генерируемых элементов мы используем id типа pin1, pin2 и т.д.

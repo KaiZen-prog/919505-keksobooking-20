@@ -15,25 +15,10 @@
   var PIN_MIN_Y = 130;
   var PIN_MAX_Y = 630;
 
-  // var mapWidth = window.data.getElementProperties(window.util.mapPins).width;
-  var mapWidth = parseInt(window.getComputedStyle(window.util.mapPins).width, 10);
+  var mapWidth = window.utils.getElementProperties(window.utils.mapPins).width;
 
   window.data = {
     apartmentQuantity: 8,
-
-    getElementProperties: function (element) {
-      var elementWidth = window.getComputedStyle(element).width;
-      var elementHeight = window.getComputedStyle(element).height;
-      var elementTop = window.getComputedStyle(element).top;
-      var elementLeft = window.getComputedStyle(element).left;
-
-      return {
-        width: parseInt(elementWidth, 10),
-        height: parseInt(elementHeight, 10),
-        top: parseInt(elementTop, 10),
-        left: parseInt(elementLeft, 10)
-      };
-    },
 
     createApartments: function (elementsQuantity) {
       var apartmentsArray = [];
@@ -45,20 +30,20 @@
 
           offer: {
             title: 'Предложение №' + (i + 1),
-            price: window.util.getRandomNumber(MIN_PRICE, MAX_PRICE),
-            type: window.util.getRandomArrayElement(HOUSING_TYPES),
-            rooms: window.util.getRandomNumber(MIN_ROOMS, MAX_ROOMS),
-            guests: window.util.getRandomNumber(MIN_GUESTS, MAX_GUESTS),
-            checkin: window.util.getRandomArrayElement(CHECKINS),
-            checkout: window.util.getRandomArrayElement(CHECKOUTS),
-            features: window.util.createRandomArray(FEATURES),
+            price: window.utils.getRandomNumber(MIN_PRICE, MAX_PRICE),
+            type: window.utils.getRandomArrayElement(HOUSING_TYPES),
+            rooms: window.utils.getRandomNumber(MIN_ROOMS, MAX_ROOMS),
+            guests: window.utils.getRandomNumber(MIN_GUESTS, MAX_GUESTS),
+            checkin: window.utils.getRandomArrayElement(CHECKINS),
+            checkout: window.utils.getRandomArrayElement(CHECKOUTS),
+            features: window.utils.createRandomArray(FEATURES),
             description: 'Описание предложения №' + (i + 1),
-            photos: window.util.createRandomArray(PHOTOS)
+            photos: window.utils.createRandomArray(PHOTOS)
           },
 
           location: {
-            x: window.util.getRandomNumber(0, mapWidth),
-            y: window.util.getRandomNumber(PIN_MIN_Y, PIN_MAX_Y)
+            x: window.utils.getRandomNumber(0, mapWidth),
+            y: window.utils.getRandomNumber(PIN_MIN_Y, PIN_MAX_Y)
           },
         };
         apartment.offer.address = apartment.location.x + ', ' + apartment.location.y;

@@ -10,21 +10,23 @@
   var timeInSelect = adForm.querySelector('#timein');
   var timeOutSelect = adForm.querySelector('#timeout');
 
+  var addressInput = adForm.querySelector('input[name="address"]');
+
   window.form = {
-    adForm: adForm,
-    addressInput: adForm.querySelector('input[name="address"]'),
-
-    roomsSelect: roomsSelect,
-    guestsSelect: guestsSelect,
-    housingTypeSelect: housingTypeSelect,
-    priceInput: priceInput,
-    timeInSelect: timeInSelect,
-    timeOutSelect: timeOutSelect,
-
-    enableFields: function () {
+    activateForm: function () {
       for (var i = 0; i < fieldsetCollection.length; i++) {
         fieldsetCollection[i].disabled = false;
       }
+
+      addressInput.value = window.pin.getPinAddress(window.utils.mainPin, true);
+
+      adForm.classList.remove('ad-form--disabled');
+
+      roomsSelect.addEventListener('change', window.form.onFilterChange);
+      guestsSelect.addEventListener('change', window.form.onFilterChange);
+      housingTypeSelect.addEventListener('change', window.form.onHousingTypeChange);
+      timeInSelect.addEventListener('change', window.form.onTimeInChange);
+      timeOutSelect.addEventListener('change', window.form.onTimeOutChange);
     },
 
     onHousingTypeChange: function () {

@@ -18,13 +18,13 @@
     pinImg.alt = apartment[0].offer.title;
 
     fragment.appendChild(firstPin);
-    window.util.mapPins.appendChild(fragment);
+    window.utils.mapPins.appendChild(fragment);
 
-    var mapPinsCollection = window.util.mapPins.querySelectorAll('.map__pin');
+    var mapPinsCollection = window.utils.mapPins.querySelectorAll('.map__pin');
     var mapPin = mapPinsCollection[mapPinsCollection.length - 1];
 
-    var pinWidth = window.data.getElementProperties(mapPin).width;
-    var pinHeight = window.data.getElementProperties(mapPin).height;
+    var pinWidth = window.utils.getElementProperties(mapPin).width;
+    var pinHeight = window.utils.getElementProperties(mapPin).height;
 
     mapPin.parentNode.removeChild(mapPin);
 
@@ -56,14 +56,14 @@
         var pin = createPin(array[i], i);
         fragment.appendChild(pin);
       }
-      window.util.mapPins.appendChild(fragment);
+      window.utils.mapPins.appendChild(fragment);
     },
 
     getPinAddress: function (pin, isPointyEnd) {
-      var width = window.data.getElementProperties(pin).width;
-      var height = window.data.getElementProperties(pin).height;
-      var left = window.data.getElementProperties(pin).left;
-      var top = window.data.getElementProperties(pin).top;
+      var width = window.utils.getElementProperties(pin).width;
+      var height = window.utils.getElementProperties(pin).height;
+      var left = window.utils.getElementProperties(pin).left;
+      var top = window.utils.getElementProperties(pin).top;
 
       var pinAddressX = Math.floor(left + width / 2);
 
