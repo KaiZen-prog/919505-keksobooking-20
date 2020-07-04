@@ -2,7 +2,7 @@
 
 (function () {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
+  var mapPins = window.utils.mapPins;
   var fragment = document.createDocumentFragment();
 
   // Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
@@ -18,9 +18,9 @@
     pinImg.alt = apartment[0].offer.title;
 
     fragment.appendChild(firstPin);
-    window.utils.mapPins.appendChild(fragment);
+    mapPins.appendChild(fragment);
 
-    var mapPinsCollection = window.utils.mapPins.querySelectorAll('.map__pin');
+    var mapPinsCollection = mapPins.querySelectorAll('.map__pin');
     var mapPin = mapPinsCollection[mapPinsCollection.length - 1];
 
     var pinWidth = window.utils.getElementProperties(mapPin).width;
@@ -56,7 +56,7 @@
         var pin = createPin(array[i], i);
         fragment.appendChild(pin);
       }
-      window.utils.mapPins.appendChild(fragment);
+      mapPins.appendChild(fragment);
     },
 
     getPinAddress: function (pin, isPointyEnd) {

@@ -15,7 +15,8 @@
   var PIN_MIN_Y = 130;
   var PIN_MAX_Y = 630;
 
-  var mapWidth = window.utils.getElementProperties(window.utils.mapPins).width;
+  var mapPins = window.utils.mapPins;
+  var mapWidth = window.utils.getElementProperties(mapPins).width;
 
   window.data = {
     apartmentQuantity: 8,
