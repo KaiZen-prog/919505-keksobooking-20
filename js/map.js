@@ -10,22 +10,6 @@
   window.form.onHousingTypeChange();
 
   // Перевод страницы в активное состояние при нажатии на mainPin
-  var onMapPinClick = function (evt) {
-    var cards = map.querySelectorAll('article');
-
-    for (var i = 0; i < cards.length; i++) {
-      cards[i].remove();
-    }
-
-    var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var card = window.card.createCard(apartments[pinNumber], pinNumber);
-    map.insertBefore(card, document.querySelector('.map__filters-container'));
-    var cardCloseButton = map.querySelector('.popup__close');
-
-    cardCloseButton.addEventListener('click', onCardCloseClick);
-    document.addEventListener('keydown', onCardCloseKeydown);
-  };
-
   var openMap = function () {
     mainPin.removeEventListener('mousedown', onMainPinMousedown);
     mainPin.removeEventListener('keydown', onMainPinKeydown);
@@ -42,7 +26,6 @@
     window.form.activateForm();
   };
 
-
   var onMainPinMousedown = function (evt) {
     window.utils.isLeftMouseDown(evt, openMap);
   };
@@ -53,6 +36,27 @@
 
   mainPin.addEventListener('mousedown', onMainPinMousedown);
   mainPin.addEventListener('keydown', onMainPinKeydown);
+
+  // Открытие карточки
+  var openCard = function (evt) {
+    var cards = map.querySelectorAll('article');
+
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].remove();
+    }
+
+    var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
+    var card = window.card.createCard(apartments[pinNumber], pinNumber);
+    map.insertBefore(card, document.querySelector('.map__filters-container'));
+    var cardCloseButton = map.querySelector('.popup__close');
+
+    cardCloseButton.addEventListener('click', onCardCloseClick);
+    document.addEventListener('keydown', onCardCloseKeydown);
+  };
+
+  var onMapPinClick = function (evt) {
+    openCard(evt);
+  };
 
 
   // Закрытие карточки
