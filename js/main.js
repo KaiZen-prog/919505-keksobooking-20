@@ -3,11 +3,11 @@
 (function () {
   var map = document.querySelector('.map');
   var mainPin = window.utils.mainPin;
-  var apartments = window.data.createApartments(window.data.apartmentQuantity);
+  var apartments = window.createApartments(window.apartmentsData.apartmentQuantity);
 
   // Изначально тип выбранного жилья и минимальная цена за ночь не соответствуют друг другу.
   // Приводим в соответствие.
-  window.form.onHousingTypeChange();
+  window.adForm.onHousingTypeChange();
 
   // Перевод страницы в активное состояние при нажатии на mainPin
   var openMap = function () {
@@ -16,14 +16,14 @@
 
     map.classList.remove('map--faded');
 
-    window.pin.renderPins(apartments);
+    window.mapPins.render(apartments);
 
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < pins.length; i++) {
       pins[i].addEventListener('click', onMapPinClick);
     }
 
-    window.form.activateForm();
+    window.adForm.activate();
   };
 
   var onMainPinMousedown = function (evt) {
@@ -46,7 +46,7 @@
     }
 
     var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var card = window.card.createCard(apartments[pinNumber], pinNumber);
+    var card = window.createCard(apartments[pinNumber], pinNumber);
     map.insertBefore(card, document.querySelector('.map__filters-container'));
     var cardCloseButton = map.querySelector('.popup__close');
 
