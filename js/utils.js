@@ -5,6 +5,9 @@
   var KEY_CODE_ENTER = 13;
   var KEY_CODE_ESCAPE = 27;
 
+  window.PIN_MIN_Y = 130;
+  window.PIN_MAX_Y = 630;
+
   var getRandomArrayElement = function (array) {
     var rand = Math.floor(Math.random() * array.length);
     return array[rand];
@@ -37,6 +40,13 @@
     };
   };
 
+  var getMinMaxTop = function (minCoord, maxCoord, elementHeight, pointyEndHeight) {
+    return {
+      min: minCoord - elementHeight - pointyEndHeight,
+      max: maxCoord - elementHeight - pointyEndHeight,
+    };
+  };
+
   // Для автоматически генерируемых элементов мы используем id типа pin1, pin2 и т.д.
   // Данная функция возвращает число из произвольного id, которое можно будет использовать как порядковый номер элемента.
   var getIntegerFromElementID = function (elementId) {
@@ -44,22 +54,16 @@
     return elementId.match(r);
   };
 
-  var isLeftMouseDown = function (evt, action) {
-    if (evt.button === KEY_CODE_MOUSE_LEFT) {
-      action();
-    }
+  var isLeftMouseDown = function (evt) {
+    return evt.button === KEY_CODE_MOUSE_LEFT;
   };
 
-  var isEnterDown = function (evt, action) {
-    if (evt.keyCode === KEY_CODE_ENTER) {
-      action();
-    }
+  var isEnterDown = function (evt) {
+    return evt.keyCode === KEY_CODE_ENTER;
   };
 
-  var isEscapeDown = function (evt, action) {
-    if (evt.keyCode === KEY_CODE_ESCAPE) {
-      action(evt);
-    }
+  var isEscapeDown = function (evt) {
+    return evt.keyCode === KEY_CODE_ESCAPE;
   };
 
   window.utils = {
@@ -70,6 +74,7 @@
     getIntegerFromElementID: getIntegerFromElementID,
     isLeftMouseDown: isLeftMouseDown,
     isEnterDown: isEnterDown,
-    isEscapeDown: isEscapeDown
+    isEscapeDown: isEscapeDown,
+    getMinMaxTop: getMinMaxTop
   };
 })();
