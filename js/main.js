@@ -2,8 +2,8 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mainPin = window.utils.mainPin;
-  var apartments = window.createApartments(window.apartmentsData.apartmentQuantity);
+  var mainPin = document.querySelector('.map__pin--main');
+  var apartments = window.createApartments(window.APARTMENT_QUANTITY);
 
   // Изначально тип выбранного жилья и минимальная цена за ночь не соответствуют друг другу.
   // Приводим в соответствие.

@@ -5,9 +5,6 @@
   var KEY_CODE_ENTER = 13;
   var KEY_CODE_ESCAPE = 27;
 
-  var mapPins = document.querySelector('.map__pins');
-  var mainPin = document.querySelector('.map__pin--main');
-
   var getRandomArrayElement = function (array) {
     var rand = Math.floor(Math.random() * array.length);
     return array[rand];
@@ -66,8 +63,6 @@
   };
 
   window.utils = {
-    mapPins: mapPins,
-    mainPin: mainPin,
     getRandomArrayElement: getRandomArrayElement,
     getRandomNumber: getRandomNumber,
     createRandomArray: createRandomArray,

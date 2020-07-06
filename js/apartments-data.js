@@ -15,10 +15,11 @@
   var PIN_MIN_Y = 130;
   var PIN_MAX_Y = 630;
 
-  var APARTMENT_QUANTITY = 8;
+  window.APARTMENT_QUANTITY = 8;
 
-  var mapPins = window.utils.mapPins;
+  var mapPins = document.querySelector('.map__pins');
   var mapWidth = window.utils.getElementProperties(mapPins).width;
+
 
   window.createApartments = function (elementsQuantity) {
     var apartmentsArray = [];
@@ -50,9 +51,5 @@
       apartmentsArray.push(apartment);
     }
     return apartmentsArray;
-  };
-
-  window.apartmentsData = {
-    apartmentQuantity: APARTMENT_QUANTITY,
   };
 })();

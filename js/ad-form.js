@@ -12,13 +12,15 @@
 
   var addressInput = adForm.querySelector('input[name="address"]');
 
+  var mainPin = document.querySelector('.map__pin--main');
+
   // Перевод формы в активный режим
   var activate = function () {
     for (var i = 0; i < fieldsetCollection.length; i++) {
       fieldsetCollection[i].disabled = false;
     }
 
-    addressInput.value = window.mapPins.getPinAddress(window.utils.mainPin, true);
+    addressInput.value = window.mapPins.getPinAddress(mainPin, true);
 
     adForm.classList.remove('ad-form--disabled');
 

@@ -2,7 +2,7 @@
 
 (function () {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var mapPins = window.utils.mapPins;
+  var mapPins = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
   // Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
