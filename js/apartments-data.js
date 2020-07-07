@@ -12,8 +12,6 @@
   var MAX_ROOMS = 5;
   var MIN_GUESTS = 1;
   var MAX_GUESTS = 10;
-  var PIN_MIN_Y = 130;
-  var PIN_MAX_Y = 630;
 
   window.APARTMENT_QUANTITY = 8;
 
@@ -44,7 +42,7 @@
 
         location: {
           x: window.utils.getRandomNumber(0, mapWidth),
-          y: window.utils.getRandomNumber(PIN_MIN_Y, PIN_MAX_Y)
+          y: window.utils.getRandomNumber(window.PIN_MIN_Y, window.PIN_MAX_Y)
         },
       };
       apartment.offer.address = apartment.location.x + ', ' + apartment.location.y;

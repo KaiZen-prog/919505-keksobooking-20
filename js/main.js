@@ -11,7 +11,6 @@
 
   // Перевод страницы в активное состояние при нажатии на mainPin
   var openMap = function () {
-    mainPin.removeEventListener('mousedown', onMainPinMousedown);
     mainPin.removeEventListener('keydown', onMainPinKeydown);
 
     map.classList.remove('map--faded');
@@ -27,11 +26,16 @@
   };
 
   var onMainPinMousedown = function (evt) {
-    window.utils.isLeftMouseDown(evt, openMap);
+    if (window.utils.isLeftMouseDown(evt)) {
+      window.onMainPinMousedown(evt);
+      openMap();
+    }
   };
 
   var onMainPinKeydown = function (evt) {
-    window.utils.isEnterDown(evt, openMap);
+    if (window.utils.isEnterDown(evt)) {
+      openMap();
+    }
   };
 
   mainPin.addEventListener('mousedown', onMainPinMousedown);
@@ -77,6 +81,8 @@
   };
 
   var onCardCloseKeydown = function (evt) {
-    window.utils.isEscapeDown(evt, closeCard);
+    if (window.utils.isEscapeDown(evt)) {
+      closeCard();
+    }
   };
 })();
