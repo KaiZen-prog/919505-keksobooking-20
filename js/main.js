@@ -3,7 +3,6 @@
 (function () {
   var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
-  // var apartments = window.createApartments(window.apartmentsData.apartmentQuantity);
 
   // Изначально тип выбранного жилья и минимальная цена за ночь не соответствуют друг другу.
   // Приводим в соответствие.

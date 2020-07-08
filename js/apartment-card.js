@@ -152,14 +152,11 @@
 
   // Закрытие карточки
   var closeCard = function () {
-    var closedCard = map.querySelector('article');
     var cardNumber = window.utils.getIntegerFromElementID(card.id);
     var pin = map.querySelector('#pin' + cardNumber);
 
-    document.removeEventListener('keydown', onCardCloseKeydown);
     pin.addEventListener('click', window.mapPins.onClick);
-
-    closedCard.remove();
+    map.querySelector('article').remove();
   };
 
   var onCardCloseClick = function () {

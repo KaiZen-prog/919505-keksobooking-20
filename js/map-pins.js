@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  // window.PINS_QUANTITY = 8;
-
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPins = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
