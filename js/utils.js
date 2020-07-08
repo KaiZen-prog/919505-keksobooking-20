@@ -26,6 +26,18 @@
     return newArray;
   };
 
+  var getRandomArrayElementsCollection = function (array, newArrayLength) {
+    var newArray = [];
+
+    for (var i = 0; i < newArrayLength; i++) {
+      var rand = Math.floor(Math.random() * array.length);
+
+      newArray.push(array[rand]);
+      array.splice(rand, 1);
+    }
+    return newArray;
+  };
+
   var getElementProperties = function (element) {
     var elementWidth = window.getComputedStyle(element).width;
     var elementHeight = window.getComputedStyle(element).height;
@@ -66,15 +78,29 @@
     return evt.keyCode === KEY_CODE_ESCAPE;
   };
 
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   window.utils = {
     getRandomArrayElement: getRandomArrayElement,
     getRandomNumber: getRandomNumber,
     createRandomArray: createRandomArray,
+    getRandomArrayElementsCollection: getRandomArrayElementsCollection,
     getElementProperties: getElementProperties,
     getIntegerFromElementID: getIntegerFromElementID,
     isLeftMouseDown: isLeftMouseDown,
     isEnterDown: isEnterDown,
     isEscapeDown: isEscapeDown,
-    getMinMaxTop: getMinMaxTop
+    getMinMaxTop: getMinMaxTop,
+    errorHandler: errorHandler
   };
 })();
