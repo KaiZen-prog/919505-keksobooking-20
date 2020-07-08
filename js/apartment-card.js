@@ -2,19 +2,19 @@
 
 (function () {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-  var cardClone = cardTemplate.cloneNode(true);
+  var card = cardTemplate.cloneNode(true);
 
-  var title = cardClone.querySelector('.popup__title');
-  var address = cardClone.querySelector('.popup__text--address');
-  var price = cardClone.querySelector('.popup__text--price');
-  var housingType = cardClone.querySelector('.popup__type');
-  var roomsAndGuests = cardClone.querySelector('.popup__text--capacity');
-  var time = cardClone.querySelector('.popup__text--time');
-  var features = cardClone.querySelector('.popup__features');
-  var description = cardClone.querySelector('.popup__description');
-  var photos = cardClone.querySelector('.popup__photos');
+  var title = card.querySelector('.popup__title');
+  var address = card.querySelector('.popup__text--address');
+  var price = card.querySelector('.popup__text--price');
+  var housingType = card.querySelector('.popup__type');
+  var roomsAndGuests = card.querySelector('.popup__text--capacity');
+  var time = card.querySelector('.popup__text--time');
+  var features = card.querySelector('.popup__features');
+  var description = card.querySelector('.popup__description');
+  var photos = card.querySelector('.popup__photos');
   var img = photos.querySelector('img');
-  var avatar = cardClone.querySelector('.popup__avatar');
+  var avatar = card.querySelector('.popup__avatar');
 
   var map = document.querySelector('.map');
 
@@ -99,7 +99,7 @@
     // При открывании новой карточки - вычищаем старые картинки из photos (если они были) и загружаем новые, если есть.
     if (entity.offer.photos.length > 0) {
       if (isPhotosRemoved) {
-        cardClone.appendChild(photos);
+        card.appendChild(photos);
         isPhotosRemoved = false;
       }
 
@@ -129,9 +129,9 @@
 
     avatar.src = entity.author.avatar;
 
-    cardClone.id = 'card' + cardId;
+    card.id = 'card' + cardId;
 
-    return cardClone;
+    return card;
   };
 
   // Открытие карточки
@@ -143,34 +143,32 @@
     }
 
     var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var card = window.createCard(window.apartments[pinNumber], pinNumber);
-    map.insertBefore(card, document.querySelector('.map__filters-container'));
-    var cardCloseButton = map.querySelector('.popup__close');
+    var newCard = window.createCard(window.apartments[pinNumber], pinNumber);
+    map.insertBefore(newCard, document.querySelector('.map__filters-container'));
 
-    cardCloseButton.addEventListener('click', onCardCloseClick);
+    map.querySelector('.popup__close').addEventListener('click', onCardCloseClick);
     document.addEventListener('keydown', onCardCloseKeydown);
   };
 
   // Закрытие карточки
-  var closeCard = function (evt) {
-    var card = map.querySelector('article');
+  var closeCard = function () {
+    var closedCard = map.querySelector('article');
     var cardNumber = window.utils.getIntegerFromElementID(card.id);
     var pin = map.querySelector('#pin' + cardNumber);
 
-    evt.target.removeEventListener('click', onCardCloseClick);
     document.removeEventListener('keydown', onCardCloseKeydown);
     pin.addEventListener('click', window.mapPins.onClick);
 
-    card.remove();
+    closedCard.remove();
   };
 
-  var onCardCloseClick = function (evt) {
-    closeCard(evt);
+  var onCardCloseClick = function () {
+    closeCard();
   };
 
   var onCardCloseKeydown = function (evt) {
     if (window.utils.isEscapeDown(evt)) {
-      closeCard(evt);
+      closeCard();
     }
   };
 
