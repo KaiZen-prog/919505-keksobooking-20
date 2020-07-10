@@ -135,7 +135,7 @@
   };
 
   var removeCard = function () {
-    var previousCard = map.querySelector('article');
+    var previousCard = map.querySelector('.map__card');
     if (previousCard) {
       previousCard.remove();
     }

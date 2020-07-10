@@ -92,7 +92,7 @@
     pinSizes = getPinSizes(window.apartments[0]);
   };
 
-  window.load(window.onGetApartments, window.utils.errorHandler);
+  window.load(window.onGetApartments, window.renderErrorPopup);
 
   window.mapPins = {
     render: render,

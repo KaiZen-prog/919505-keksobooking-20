@@ -28,13 +28,13 @@
 
   var getRandomArrayElementsCollection = function (array, newArrayLength) {
     var newArray = [];
-
     for (var i = 0; i < newArrayLength; i++) {
-      var rand = Math.floor(Math.random() * array.length);
+      var randomElement = getRandomArrayElement(array);
 
-      newArray.push(array[rand]);
-      array.splice(rand, 1);
+      newArray.push(randomElement);
+      array.splice(array.indexOf(randomElement), 1);
     }
+
     return newArray;
   };
 
@@ -78,18 +78,6 @@
     return evt.keyCode === KEY_CODE_ESCAPE;
   };
 
-  var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
   window.utils = {
     getRandomArrayElement: getRandomArrayElement,
     getRandomNumber: getRandomNumber,
@@ -101,6 +89,5 @@
     isEnterDown: isEnterDown,
     isEscapeDown: isEscapeDown,
     getMinMaxTop: getMinMaxTop,
-    errorHandler: errorHandler
   };
 })();
