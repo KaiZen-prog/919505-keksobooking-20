@@ -26,6 +26,18 @@
     return newArray;
   };
 
+  var getRandomArrayElementsCollection = function (array, newArrayLength) {
+    var newArray = [];
+    for (var i = 0; i < newArrayLength; i++) {
+      var randomElement = getRandomArrayElement(array);
+
+      newArray.push(randomElement);
+      array.splice(array.indexOf(randomElement), 1);
+    }
+
+    return newArray;
+  };
+
   var getElementProperties = function (element) {
     var elementWidth = window.getComputedStyle(element).width;
     var elementHeight = window.getComputedStyle(element).height;
@@ -70,11 +82,12 @@
     getRandomArrayElement: getRandomArrayElement,
     getRandomNumber: getRandomNumber,
     createRandomArray: createRandomArray,
+    getRandomArrayElementsCollection: getRandomArrayElementsCollection,
     getElementProperties: getElementProperties,
     getIntegerFromElementID: getIntegerFromElementID,
     isLeftMouseDown: isLeftMouseDown,
     isEnterDown: isEnterDown,
     isEscapeDown: isEscapeDown,
-    getMinMaxTop: getMinMaxTop
+    getMinMaxTop: getMinMaxTop,
   };
 })();

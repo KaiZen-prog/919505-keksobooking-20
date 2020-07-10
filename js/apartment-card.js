@@ -16,8 +16,11 @@
   var img = photos.querySelector('img');
   var avatar = card.querySelector('.popup__avatar');
 
+  var map = document.querySelector('.map');
+
   var isPhotosRemoved = false;
 
+  // Генерация карточки
   window.createCard = function (entity, cardId) {
     title.textContent = entity.offer.title;
     address.textContent = entity.offer.address.toString();
@@ -129,5 +132,47 @@
     card.id = 'card' + cardId;
 
     return card;
+  };
+
+  var removeCard = function () {
+    var previousCard = map.querySelector('.map__card');
+    if (previousCard) {
+      previousCard.remove();
+    }
+  };
+
+  // Открытие карточки
+  var openCard = function (evt) {
+    removeCard();
+
+    var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
+    var newCard = window.createCard(window.apartments[pinNumber], pinNumber);
+    map.insertBefore(newCard, document.querySelector('.map__filters-container'));
+
+    map.querySelector('.popup__close').addEventListener('click', onCardCloseClick);
+    document.addEventListener('keydown', onCardCloseKeydown);
+  };
+
+  // Закрытие карточки
+  var closeCard = function () {
+    var cardNumber = window.utils.getIntegerFromElementID(card.id);
+    var pin = map.querySelector('#pin' + cardNumber);
+
+    pin.addEventListener('click', window.mapPins.onClick);
+    removeCard();
+  };
+
+  var onCardCloseClick = function () {
+    closeCard();
+  };
+
+  var onCardCloseKeydown = function (evt) {
+    if (window.utils.isEscapeDown(evt)) {
+      closeCard();
+    }
+  };
+
+  window.apartmentCard = {
+    open: openCard
   };
 })();

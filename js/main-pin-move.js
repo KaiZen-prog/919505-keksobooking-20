@@ -76,6 +76,8 @@
     var onMouseUp = function () {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+
+      window.mapPins.render();
     };
 
     document.addEventListener('mousemove', onMouseMove);
