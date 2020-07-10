@@ -134,13 +134,16 @@
     return card;
   };
 
+  var removeCard = function () {
+    var previousCard = map.querySelector('article');
+    if (previousCard) {
+      previousCard.remove();
+    }
+  };
+
   // Открытие карточки
   var openCard = function (evt) {
-    var cards = map.querySelectorAll('article');
-
-    for (var i = 0; i < cards.length; i++) {
-      cards[i].remove();
-    }
+    removeCard();
 
     var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
     var newCard = window.createCard(window.apartments[pinNumber], pinNumber);
@@ -156,7 +159,7 @@
     var pin = map.querySelector('#pin' + cardNumber);
 
     pin.addEventListener('click', window.mapPins.onClick);
-    map.querySelector('article').remove();
+    removeCard();
   };
 
   var onCardCloseClick = function () {
