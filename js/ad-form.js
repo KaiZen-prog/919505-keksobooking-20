@@ -14,6 +14,12 @@
 
   var mainPin = document.querySelector('.map__pin--main');
 
+  var successPopupTemplate = document.querySelector('#success').content.querySelector('.success');
+  var successPopup = successPopupTemplate.cloneNode(true);
+
+  var errorPopupTemplate = document.querySelector('#error').content.querySelector('.error');
+  var errorPopup = errorPopupTemplate.cloneNode(true);
+
   // Перевод формы в активный режим
   var activate = function () {
     for (var i = 0; i < fieldsetCollection.length; i++) {
@@ -24,11 +30,39 @@
 
     adForm.classList.remove('ad-form--disabled');
 
+    checkValidity();
+
     roomsSelect.addEventListener('change', onFilterChange);
     guestsSelect.addEventListener('change', onFilterChange);
     housingTypeSelect.addEventListener('change', onHousingTypeChange);
     timeInSelect.addEventListener('change', onTimeInChange);
     timeOutSelect.addEventListener('change', onTimeOutChange);
+  };
+
+  // Перевод формы в неактивный режим
+  var deactivate = function () {
+    adForm.reset();
+
+    for (var i = 0; i < fieldsetCollection.length; i++) {
+      fieldsetCollection[i].disabled = true;
+    }
+
+    addressInput.value = '';
+
+    adForm.classList.add('ad-form--disabled');
+
+    roomsSelect.removeEventListener('change', onFilterChange);
+    guestsSelect.removeEventListener('change', onFilterChange);
+    housingTypeSelect.removeEventListener('change', onHousingTypeChange);
+    timeInSelect.removeEventListener('change', onTimeInChange);
+    timeOutSelect.removeEventListener('change', onTimeOutChange);
+  };
+
+  // Валидация исходных значений полей формы
+  var checkValidity = function () {
+    onFilterChange();
+    onHousingTypeChange();
+    onTimeInChange();
   };
 
   var onHousingTypeChange = function () {
@@ -116,8 +150,75 @@
     }
   };
 
+  // Обработчики сообщения об успешной отправке формы
+  var closeSuccessPopup = function () {
+    document.removeEventListener('keydown', onSuccessPopupKeyDown);
+    document.removeEventListener('click', onSuccessPopupClick);
+
+    document.querySelector('.success').remove();
+  };
+
+  var onSuccessPopupKeyDown = function (evt) {
+    if (window.utils.isEscapeDown(evt)) {
+      closeSuccessPopup();
+    }
+  };
+
+  var onSuccessPopupClick = function (evt) {
+    if (window.utils.isLeftMouseDown(evt)) {
+      closeSuccessPopup();
+    }
+  };
+
+  var showSuccessMessage = function () {
+    document.querySelector('main').appendChild(successPopup);
+
+    document.addEventListener('keydown', onSuccessPopupKeyDown);
+    document.addEventListener('click', onSuccessPopupClick);
+  };
+
+  // Обработчики сообщения о неуспешной отправке формы
+  var closeErrorPopup = function () {
+    document.removeEventListener('keydown', onErrorPopupKeyDown);
+    document.removeEventListener('click', onErrorPopupClick);
+
+    document.querySelector('.error').remove();
+  };
+
+  var onErrorPopupKeyDown = function (evt) {
+    if (window.utils.isEscapeDown(evt)) {
+      closeErrorPopup();
+    }
+  };
+
+  var onErrorPopupClick = function (evt) {
+    if (window.utils.isLeftMouseDown(evt)) {
+      closeErrorPopup();
+    }
+  };
+
+  var onErrorButtonClick = function () {
+    closeErrorPopup();
+  };
+
+  var showErrorMessage = function (errorMessage) {
+    document.querySelector('main').appendChild(errorPopup);
+
+    var errorParagraph = errorPopup.querySelector('.error__message');
+    errorParagraph.textContent = errorMessage;
+
+    var errorButton = document.querySelector('.error__button');
+
+    errorButton.addEventListener('click', onErrorButtonClick);
+    document.addEventListener('keydown', onErrorPopupKeyDown);
+    document.addEventListener('click', onErrorPopupClick);
+  };
+
   window.adForm = {
     activate: activate,
-    onHousingTypeChange: onHousingTypeChange
+    deactivate: deactivate,
+    onHousingTypeChange: onHousingTypeChange,
+    showSuccessMessage: showSuccessMessage,
+    showErrorMessage: showErrorMessage
   };
 })();
