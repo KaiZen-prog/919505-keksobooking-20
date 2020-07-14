@@ -10,7 +10,6 @@
   var housingType = card.querySelector('.popup__type');
   var roomsAndGuests = card.querySelector('.popup__text--capacity');
   var time = card.querySelector('.popup__text--time');
-  var features = card.querySelector('.popup__features');
   var description = card.querySelector('.popup__description');
   var photos = card.querySelector('.popup__photos');
   var img = photos.querySelector('img');
@@ -47,7 +46,17 @@
 
     time.textContent = 'Заезд после ' + entity.offer.checkin + ', выезд до ' + entity.offer.checkout + '.';
 
+    var features = card.querySelector('.popup__features');
+
     if (entity.offer.features.length > 0) {
+      if (!features) {
+        var featuresFragment = document.createDocumentFragment();
+        features = document.createElement('ul');
+        features.classList.add('popup__features');
+
+        featuresFragment.appendChild(features);
+        card.insertBefore(featuresFragment, description);
+      }
       while (features.firstChild) {
         features.removeChild(features.firstChild);
       }
