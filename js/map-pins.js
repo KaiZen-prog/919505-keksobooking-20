@@ -1,11 +1,44 @@
 'use strict';
 
 (function () {
+  var MAX_PIN_QUANTITY = 5;
+  var HOUSING_TYPE_ANY = 'any';
+
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPins = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
-  window.apartments = [];
+  var map = document.querySelector('.map');
+  var filterForm = map.querySelector('form');
+  var housingTypeFilter = filterForm.querySelector('#housing-type');
+
+  // Массив ВСЕХ полученных с сервера апартаментов и массив апартаментов, подходящих под текущий фильтр
+  window.PrimeApartmentsArray = [];
+  window.currentApartmentsArray = [];
+
+  // Пересобираем массив текущих апартаментов с учетом фильтрации
+  var onHousingTypeChange = function () {
+    window.currentApartmentsArray = [];
+    var newHousingType = housingTypeFilter.value;
+
+    window.apartmentCard.remove();
+    removePins();
+
+    if (newHousingType === HOUSING_TYPE_ANY) {
+      for (var i = 0; i < window.PrimeApartmentsArray.length; i++) {
+        window.currentApartmentsArray.push(window.PrimeApartmentsArray[i]);
+      }
+    } else {
+      for (i = 0; i < window.PrimeApartmentsArray.length; i++) {
+        if (window.PrimeApartmentsArray[i].offer.type === newHousingType) {
+          window.currentApartmentsArray.push(window.PrimeApartmentsArray[i]);
+        }
+      }
+    }
+
+    render(window.currentApartmentsArray);
+  };
+
   var pinSizes;
 
   // Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
@@ -51,14 +84,28 @@
     return pin;
   };
 
+  var deactivateCurrentPin = function () {
+    var activePin = map.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
+  };
+
   var onClick = function (evt) {
+    deactivateCurrentPin();
+
+    evt.currentTarget.classList.add('map__pin--active');
     window.apartmentCard.open(evt);
   };
 
-  var render = function () {
-    for (var i = 0; i < window.apartments.length; i++) {
-      var pin = createPin(window.apartments[i], i);
-      fragment.appendChild(pin);
+  var render = function (array) {
+    for (var i = 0; i < array.length; i++) {
+      if (i <= MAX_PIN_QUANTITY) {
+        var pin = createPin(array[i], i + 1);
+        fragment.appendChild(pin);
+      } else {
+        break;
+      }
     }
     mapPins.appendChild(fragment);
 
@@ -88,24 +135,25 @@
   };
 
   window.onGetApartments = function (data) {
-    window.apartments = window.utils.getRandomArrayElementsCollection(data, data.length);
-    pinSizes = getPinSizes(window.apartments[0]);
+    window.PrimeApartmentsArray = data;
+    window.currentApartmentsArray = data;
+
+    pinSizes = getPinSizes(window.PrimeApartmentsArray[0]);
   };
 
   // Удаляем все ранее сгенерированные пины
-  var remove = function () {
+  var removePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
     }
   };
 
-  window.load(window.onGetApartments, window.renderErrorPopup);
-
   window.mapPins = {
+    onHousingTypeChange: onHousingTypeChange,
     render: render,
     getPinAddress: getPinAddress,
     onClick: onClick,
-    remove: remove
+    remove: removePins
   };
 })();

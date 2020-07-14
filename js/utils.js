@@ -28,11 +28,13 @@
 
   var getRandomArrayElementsCollection = function (array, newArrayLength) {
     var newArray = [];
+    var bufferArray = array;
+
     for (var i = 0; i < newArrayLength; i++) {
-      var randomElement = getRandomArrayElement(array);
+      var randomElement = getRandomArrayElement(bufferArray);
 
       newArray.push(randomElement);
-      array.splice(array.indexOf(randomElement), 1);
+      bufferArray.splice(bufferArray.indexOf(randomElement), 1);
     }
 
     return newArray;

@@ -152,10 +152,10 @@
 
   // Обработчики сообщения об успешной отправке формы
   var closeSuccessPopup = function () {
+    document.querySelector('.success').remove();
+
     document.removeEventListener('keydown', onSuccessPopupKeyDown);
     document.removeEventListener('click', onSuccessPopupClick);
-
-    document.querySelector('.success').remove();
   };
 
   var onSuccessPopupKeyDown = function (evt) {
@@ -179,10 +179,10 @@
 
   // Обработчики сообщения о неуспешной отправке формы
   var closeErrorPopup = function () {
+    document.querySelector('.error').remove();
+
     document.removeEventListener('keydown', onErrorPopupKeyDown);
     document.removeEventListener('click', onErrorPopupClick);
-
-    document.querySelector('.error').remove();
   };
 
   var onErrorPopupKeyDown = function (evt) {

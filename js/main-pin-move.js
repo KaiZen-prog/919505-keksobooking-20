@@ -74,10 +74,10 @@
     };
 
     var onMouseUp = function () {
+      window.mapPins.render(window.PrimeApartmentsArray);
+
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-
-      window.mapPins.render();
     };
 
     document.addEventListener('mousemove', onMouseMove);

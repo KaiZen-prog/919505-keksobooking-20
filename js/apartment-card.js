@@ -135,12 +135,11 @@
   };
 
   var removeCard = function () {
-    document.removeEventListener('keydown', onCardCloseKeyDown);
-
     var previousCard = map.querySelector('.map__card');
     if (previousCard) {
       previousCard.remove();
     }
+    document.removeEventListener('keydown', onCardCloseKeyDown);
   };
 
   // Открытие карточки
@@ -148,7 +147,7 @@
     removeCard();
 
     var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var newCard = window.createCard(window.apartments[pinNumber], pinNumber);
+    var newCard = window.createCard(window.currentApartmentsArray[pinNumber - 1], pinNumber);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
 
     map.querySelector('.popup__close').addEventListener('click', onCardCloseClick);
@@ -161,6 +160,7 @@
     var pin = map.querySelector('#pin' + cardNumber);
 
     if (pin) {
+      pin.classList.remove('map__pin--active');
       pin.addEventListener('click', window.mapPins.onClick);
     }
 
