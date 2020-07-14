@@ -13,7 +13,7 @@
   var housingTypeFilter = filterForm.querySelector('#housing-type');
 
   // Массив ВСЕХ полученных с сервера апартаментов и массив апартаментов, подходящих под текущий фильтр
-  window.PrimeApartmentsArray = [];
+  window.primeApartmentsArray = [];
   window.currentApartmentsArray = [];
 
   // Пересобираем массив текущих апартаментов с учетом фильтрации
@@ -25,13 +25,13 @@
     removePins();
 
     if (newHousingType === HOUSING_TYPE_ANY) {
-      for (var i = 0; i < window.PrimeApartmentsArray.length; i++) {
-        window.currentApartmentsArray.push(window.PrimeApartmentsArray[i]);
+      for (var i = 0; i < window.primeApartmentsArray.length; i++) {
+        window.currentApartmentsArray.push(window.primeApartmentsArray[i]);
       }
     } else {
-      for (i = 0; i < window.PrimeApartmentsArray.length; i++) {
-        if (window.PrimeApartmentsArray[i].offer.type === newHousingType) {
-          window.currentApartmentsArray.push(window.PrimeApartmentsArray[i]);
+      for (i = 0; i < window.primeApartmentsArray.length; i++) {
+        if (window.primeApartmentsArray[i].offer.type === newHousingType) {
+          window.currentApartmentsArray.push(window.primeApartmentsArray[i]);
         }
       }
     }
@@ -135,10 +135,10 @@
   };
 
   window.onGetApartments = function (data) {
-    window.PrimeApartmentsArray = data;
+    window.primeApartmentsArray = data;
     window.currentApartmentsArray = data;
 
-    pinSizes = getPinSizes(window.PrimeApartmentsArray[0]);
+    pinSizes = getPinSizes(window.primeApartmentsArray[0]);
   };
 
   // Удаляем все ранее сгенерированные пины

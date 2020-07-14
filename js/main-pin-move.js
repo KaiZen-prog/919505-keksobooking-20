@@ -74,7 +74,7 @@
     };
 
     var onMouseUp = function () {
-      window.mapPins.render(window.PrimeApartmentsArray);
+      window.mapPins.render(window.primeApartmentsArray);
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
