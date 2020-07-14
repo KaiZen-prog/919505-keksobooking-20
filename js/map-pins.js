@@ -92,11 +92,20 @@
     pinSizes = getPinSizes(window.apartments[0]);
   };
 
+  // Удаляем все ранее сгенерированные пины
+  var remove = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
+  };
+
   window.load(window.onGetApartments, window.renderErrorPopup);
 
   window.mapPins = {
     render: render,
     getPinAddress: getPinAddress,
-    onClick: onClick
+    onClick: onClick,
+    remove: remove
   };
 })();
