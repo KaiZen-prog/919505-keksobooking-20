@@ -47,6 +47,7 @@
     map.classList.add('map--faded');
 
     window.adForm.deactivate();
+    filterForm.reset();
 
     window.adForm.showSuccessMessage();
 

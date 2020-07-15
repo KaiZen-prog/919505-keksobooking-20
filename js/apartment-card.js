@@ -46,26 +46,23 @@
 
     time.textContent = 'Заезд после ' + entity.offer.checkin + ', выезд до ' + entity.offer.checkout + '.';
 
-    var features = card.querySelector('.popup__features');
+    var featuresCardBlock = card.querySelector('.popup__features');
 
     if (entity.offer.features.length > 0) {
-      if (!features) {
-        var featuresFragment = document.createDocumentFragment();
-        features = document.createElement('ul');
-        features.classList.add('popup__features');
+      if (!featuresCardBlock) {
+        featuresCardBlock = document.createElement('ul');
+        featuresCardBlock.classList.add('popup__features');
 
-        featuresFragment.appendChild(features);
-        card.insertBefore(featuresFragment, description);
+        card.insertBefore(featuresCardBlock, description);
       }
-      while (features.firstChild) {
-        features.removeChild(features.firstChild);
+      while (featuresCardBlock.firstChild) {
+        featuresCardBlock.removeChild(featuresCardBlock.firstChild);
       }
 
       var listFragment = document.createDocumentFragment();
 
       for (var i = 0; i < entity.offer.features.length; i++) {
-        var listItem;
-        listItem = document.createElement('li');
+        var listItem = document.createElement('li');
         listItem.classList.add('popup__feature');
 
         switch (entity.offer.features[i]) {
@@ -97,9 +94,11 @@
         listFragment.appendChild(listItem);
       }
 
-      features.appendChild(listFragment);
+      featuresCardBlock.appendChild(listFragment);
     } else {
-      features.remove();
+      if (featuresCardBlock) {
+        featuresCardBlock.remove();
+      }
     }
 
     description.textContent = entity.offer.description;
@@ -155,8 +154,10 @@
   var openCard = function (evt) {
     removeCard();
 
-    var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var newCard = window.createCard(window.currentApartmentsArray[pinNumber - 1], pinNumber);
+    var currentApartmentsArray = window.mapPins.getFilteredArray();
+
+    var pinNumber = window.utils.getNumberFromString(evt.currentTarget.id);
+    var newCard = window.createCard(currentApartmentsArray[pinNumber - 1], pinNumber);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
 
     map.querySelector('.popup__close').addEventListener('click', onCardCloseClick);
@@ -165,7 +166,7 @@
 
   // Закрытие карточки
   var closeCard = function () {
-    var cardNumber = window.utils.getIntegerFromElementID(card.id);
+    var cardNumber = window.utils.getNumberFromString(card.id);
     var pin = map.querySelector('#pin' + cardNumber);
 
     if (pin) {

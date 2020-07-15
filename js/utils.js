@@ -34,7 +34,9 @@
       var randomElement = getRandomArrayElement(bufferArray);
 
       newArray.push(randomElement);
-      bufferArray.splice(bufferArray.indexOf(randomElement), 1);
+
+      var randomElementIndex = bufferArray.indexOf(randomElement);
+      bufferArray.splice(randomElementIndex, 1);
     }
 
     return newArray;
@@ -61,11 +63,16 @@
     };
   };
 
-  // Для автоматически генерируемых элементов мы используем id типа pin1, pin2 и т.д.
+  // Для автоматически генерируемых элементов мы используем id типа pin01, pin02 и т.д.
   // Данная функция возвращает число из произвольного id, которое можно будет использовать как порядковый номер элемента.
-  var getIntegerFromElementID = function (elementId) {
-    var r = /\d+/;
-    return elementId.match(r);
+  var getNumberFromString = function (string) {
+    var number = '';
+    for (var i = 0; i < string.length; i++) {
+      if (parseInt(string[i], 10)) {
+        number += string[i];
+      }
+    }
+    return parseInt(number, 10);
   };
 
   var isLeftMouseDown = function (evt) {
@@ -86,7 +93,7 @@
     createRandomArray: createRandomArray,
     getRandomArrayElementsCollection: getRandomArrayElementsCollection,
     getElementProperties: getElementProperties,
-    getIntegerFromElementID: getIntegerFromElementID,
+    getNumberFromString: getNumberFromString,
     isLeftMouseDown: isLeftMouseDown,
     isEnterDown: isEnterDown,
     isEscapeDown: isEscapeDown,
