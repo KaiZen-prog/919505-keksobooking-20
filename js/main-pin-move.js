@@ -74,8 +74,6 @@
     };
 
     var onMouseUp = function () {
-      window.mapPins.render(window.mapPins.getFilteredArray());
-
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };

@@ -70,9 +70,6 @@
 
     adForm.addEventListener('submit', onFormSubmit);
 
-    mainPin.removeEventListener('keydown', onMainPinKeyDown);
-    mainPin.removeEventListener('mousedown', onMainPinMouseDown);
-
     resetButton.addEventListener('click', onResetButtonClick);
     resetButton.addEventListener('click', onResetButtonKeyDown);
 

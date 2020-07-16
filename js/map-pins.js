@@ -133,6 +133,7 @@
   window.onGetApartments = function (data) {
     window.apartmentsArray = data;
     pinSizes = getPinSizes(window.apartmentsArray[0]);
+    window.mapPins.render(window.mapPins.getFilteredArray());
   };
 
   // Удаляем все ранее сгенерированные пины
