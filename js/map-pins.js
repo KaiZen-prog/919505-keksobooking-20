@@ -94,22 +94,20 @@
   };
 
   var render = function (array) {
-    if (array.length === 0) {
-      return;
-    }
+    if (array.length) {
+      var arrayLength = Math.min(array.length, MAX_PIN_QUANTITY);
 
-    var arrayLength = Math.min(array.length, MAX_PIN_QUANTITY);
+      for (var i = 0; i < arrayLength; i++) {
+        var pin = createPin(array[i], i + 1);
+        fragment.appendChild(pin);
+      }
 
-    for (var i = 0; i < arrayLength; i++) {
-      var pin = createPin(array[i], i + 1);
-      fragment.appendChild(pin);
-    }
+      mapPins.appendChild(fragment);
 
-    mapPins.appendChild(fragment);
-
-    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (i = 0; i < pins.length; i++) {
-      pins[i].addEventListener('click', onClick);
+      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      for (i = 0; i < pins.length; i++) {
+        pins[i].addEventListener('click', onClick);
+      }
     }
   };
 
