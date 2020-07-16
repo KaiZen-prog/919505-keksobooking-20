@@ -10,6 +10,7 @@
   var housingType = card.querySelector('.popup__type');
   var roomsAndGuests = card.querySelector('.popup__text--capacity');
   var time = card.querySelector('.popup__text--time');
+  var features = card.querySelector('.popup__features');
   var description = card.querySelector('.popup__description');
   var photos = card.querySelector('.popup__photos');
   var img = photos.querySelector('img');
@@ -17,6 +18,7 @@
 
   var map = document.querySelector('.map');
 
+  var isFeaturesRemoved = false;
   var isPhotosRemoved = false;
 
   // Генерация карточки
@@ -46,17 +48,14 @@
 
     time.textContent = 'Заезд после ' + entity.offer.checkin + ', выезд до ' + entity.offer.checkout + '.';
 
-    var featuresCardBlock = card.querySelector('.popup__features');
-
     if (entity.offer.features.length > 0) {
-      if (!featuresCardBlock) {
-        featuresCardBlock = document.createElement('ul');
-        featuresCardBlock.classList.add('popup__features');
-
-        card.insertBefore(featuresCardBlock, description);
+      if (isFeaturesRemoved) {
+        card.insertBefore(features, description);
+        isFeaturesRemoved = false;
       }
-      while (featuresCardBlock.firstChild) {
-        featuresCardBlock.removeChild(featuresCardBlock.firstChild);
+
+      while (features.firstChild) {
+        features.removeChild(features.firstChild);
       }
 
       var listFragment = document.createDocumentFragment();
@@ -94,11 +93,10 @@
         listFragment.appendChild(listItem);
       }
 
-      featuresCardBlock.appendChild(listFragment);
+      features.appendChild(listFragment);
     } else {
-      if (featuresCardBlock) {
-        featuresCardBlock.remove();
-      }
+      features.remove();
+      isFeaturesRemoved = true;
     }
 
     description.textContent = entity.offer.description;
