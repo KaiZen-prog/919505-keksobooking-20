@@ -1,11 +1,32 @@
 'use strict';
 
 (function () {
+  var MAX_PIN_QUANTITY = 5;
+  var HOUSING_TYPE = 'any';
+
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPins = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
-  window.apartments = [];
+  var map = document.querySelector('.map');
+  var filterForm = map.querySelector('form');
+  var housingTypeFilter = filterForm.querySelector('#housing-type');
+
+  window.apartmentsArray = [];
+
+  var getFilteredApartmentsArray = function () {
+    return window.apartmentsArray.filter(function (value) {
+      return value.offer.type === housingTypeFilter.value || housingTypeFilter.value === HOUSING_TYPE;
+    });
+  };
+
+  var onHousingTypeChange = function () {
+    window.apartmentCard.remove();
+    removePins();
+
+    preRender(getFilteredApartmentsArray());
+  };
+
   var pinSizes;
 
   // Определяем размеры генерируемых пинов: создаем один пин, добавляем в разметку, запоминаем его размеры, удаляем пин.
@@ -42,29 +63,52 @@
     pin.style.left = (entity.location.x - (pinSizes.width / 2)) + 'px';
     pin.style.top = (entity.location.y - pinSizes.height) + 'px';
 
-    pin.id = 'pin' + pinId;
-
     var pinImg = pin.querySelector('img');
     pinImg.src = entity.author.avatar;
     pinImg.alt = entity.offer.title;
 
+    pin.id = 'pin' + pinId;
+
     return pin;
   };
 
-  var onClick = function (evt) {
+  var deactivatePreviousPin = function () {
+    var activePin = map.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+      activePin.addEventListener('click', onMapPinClick);
+    }
+  };
+
+  var onMapPinClick = function (evt) {
+    deactivatePreviousPin();
+
+    evt.currentTarget.removeEventListener('click', onMapPinClick);
+    evt.currentTarget.classList.add('map__pin--active');
     window.apartmentCard.open(evt);
   };
 
-  var render = function () {
-    for (var i = 0; i < window.apartments.length; i++) {
-      var pin = createPin(window.apartments[i], i);
+  // Проверяем длину отфильтрованного массива апартаментов.
+  // Вызывать функцию рендера пинов имеет смысл только если длина ненулевая.
+  var preRender = function (array) {
+    if (array.length) {
+      render(array);
+    }
+  };
+
+  var render = function (array) {
+    var arrayLength = Math.min(array.length, MAX_PIN_QUANTITY);
+
+    for (var i = 0; i < arrayLength; i++) {
+      var pin = createPin(array[i], i + 1);
       fragment.appendChild(pin);
     }
+
     mapPins.appendChild(fragment);
 
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (i = 0; i < pins.length; i++) {
-      pins[i].addEventListener('click', onClick);
+      pins[i].addEventListener('click', onMapPinClick);
     }
   };
 
@@ -88,24 +132,25 @@
   };
 
   window.onGetApartments = function (data) {
-    window.apartments = window.utils.getRandomArrayElementsCollection(data, data.length);
-    pinSizes = getPinSizes(window.apartments[0]);
+    window.apartmentsArray = data;
+    pinSizes = getPinSizes(window.apartmentsArray[0]);
+
+    preRender(getFilteredApartmentsArray());
   };
 
   // Удаляем все ранее сгенерированные пины
-  var remove = function () {
+  var removePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
     }
   };
 
-  window.load(window.onGetApartments, window.renderErrorPopup);
-
   window.mapPins = {
-    render: render,
+    getFilteredArray: getFilteredApartmentsArray,
+    onHousingTypeChange: onHousingTypeChange,
     getPinAddress: getPinAddress,
-    onClick: onClick,
-    remove: remove
+    onClick: onMapPinClick,
+    remove: removePins
   };
 })();

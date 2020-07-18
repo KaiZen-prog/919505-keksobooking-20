@@ -18,6 +18,7 @@
 
   var map = document.querySelector('.map');
 
+  var isFeaturesRemoved = false;
   var isPhotosRemoved = false;
 
   // Генерация карточки
@@ -48,6 +49,11 @@
     time.textContent = 'Заезд после ' + entity.offer.checkin + ', выезд до ' + entity.offer.checkout + '.';
 
     if (entity.offer.features.length > 0) {
+      if (isFeaturesRemoved) {
+        card.insertBefore(features, description);
+        isFeaturesRemoved = false;
+      }
+
       while (features.firstChild) {
         features.removeChild(features.firstChild);
       }
@@ -55,8 +61,7 @@
       var listFragment = document.createDocumentFragment();
 
       for (var i = 0; i < entity.offer.features.length; i++) {
-        var listItem;
-        listItem = document.createElement('li');
+        var listItem = document.createElement('li');
         listItem.classList.add('popup__feature');
 
         switch (entity.offer.features[i]) {
@@ -91,6 +96,7 @@
       features.appendChild(listFragment);
     } else {
       features.remove();
+      isFeaturesRemoved = true;
     }
 
     description.textContent = entity.offer.description;
@@ -135,20 +141,21 @@
   };
 
   var removeCard = function () {
-    document.removeEventListener('keydown', onCardCloseKeyDown);
-
     var previousCard = map.querySelector('.map__card');
     if (previousCard) {
       previousCard.remove();
     }
+    document.removeEventListener('keydown', onCardCloseKeyDown);
   };
 
   // Открытие карточки
   var openCard = function (evt) {
     removeCard();
 
-    var pinNumber = window.utils.getIntegerFromElementID(evt.currentTarget.id);
-    var newCard = window.createCard(window.apartments[pinNumber], pinNumber);
+    var currentApartmentsArray = window.mapPins.getFilteredArray();
+
+    var pinNumber = window.utils.getNumberFromString(evt.currentTarget.id);
+    var newCard = window.createCard(currentApartmentsArray[pinNumber - 1], pinNumber);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
 
     map.querySelector('.popup__close').addEventListener('click', onCardCloseClick);
@@ -157,10 +164,11 @@
 
   // Закрытие карточки
   var closeCard = function () {
-    var cardNumber = window.utils.getIntegerFromElementID(card.id);
+    var cardNumber = window.utils.getNumberFromString(card.id);
     var pin = map.querySelector('#pin' + cardNumber);
 
     if (pin) {
+      pin.classList.remove('map__pin--active');
       pin.addEventListener('click', window.mapPins.onClick);
     }
 
