@@ -41,12 +41,12 @@
   };
 
   // Обработчики смены фильтров
-  var onFilterChange = function () {
+  var onFilterChange = window.debounce(function () {
     window.apartmentCard.remove();
     window.mapPins.remove();
 
     window.mapPins.preRender(window.getFilteredArray());
-  };
+  });
 
   var onFeaturesClick = function (evt) {
     if (evt.target.classList.contains('map__checkbox')) {
