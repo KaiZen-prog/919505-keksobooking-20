@@ -5,6 +5,10 @@
 
   var filterForm = map.querySelector('form');
   var housingTypeFilter = filterForm.querySelector('#housing-type');
+  var housingPriceFilter = filterForm.querySelector('#housing-price');
+  var housingRoomsFilter = filterForm.querySelector('#housing-rooms');
+  var housingGuestsFilter = filterForm.querySelector('#housing-guests');
+  var housingFeaturesFilter = filterForm.querySelector('.map__features');
 
   var mainPin = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -36,6 +40,20 @@
     }
   };
 
+  // Обработчики смены фильтров
+  var onFilterChange = window.debounce(function () {
+    window.apartmentCard.remove();
+    window.mapPins.remove();
+
+    window.mapPins.preRender(window.getFilteredArray());
+  });
+
+  var onFeaturesClick = function (evt) {
+    if (evt.target.classList.contains('map__checkbox')) {
+      onFilterChange();
+    }
+  };
+
   // Перевод страницы в неактивное состояние
   var closeMap = function () {
     window.mapPins.remove();
@@ -58,7 +76,11 @@
     resetButton.removeEventListener('click', onResetButtonClick);
     resetButton.removeEventListener('click', onResetButtonKeyDown);
 
-    housingTypeFilter.removeEventListener('change', window.mapPins.onHousingTypeChange);
+    housingTypeFilter.removeEventListener('change', onFilterChange);
+    housingPriceFilter.removeEventListener('change', onFilterChange);
+    housingRoomsFilter.removeEventListener('change', onFilterChange);
+    housingGuestsFilter.removeEventListener('change', onFilterChange);
+    housingFeaturesFilter.removeEventListener('click', onFeaturesClick, true);
   };
 
   // Перевод страницы в активное состояние при нажатии на mainPin
@@ -73,7 +95,11 @@
     resetButton.addEventListener('click', onResetButtonClick);
     resetButton.addEventListener('click', onResetButtonKeyDown);
 
-    housingTypeFilter.addEventListener('change', window.mapPins.onHousingTypeChange);
+    housingTypeFilter.addEventListener('change', onFilterChange);
+    housingPriceFilter.addEventListener('change', onFilterChange);
+    housingRoomsFilter.addEventListener('change', onFilterChange);
+    housingGuestsFilter.addEventListener('change', onFilterChange);
+    housingFeaturesFilter.addEventListener('click', onFeaturesClick);
   };
 
   var onMainPinMouseDown = function (evt) {

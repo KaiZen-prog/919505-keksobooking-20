@@ -152,7 +152,7 @@
   var openCard = function (evt) {
     removeCard();
 
-    var currentApartmentsArray = window.mapPins.getFilteredArray();
+    var currentApartmentsArray = window.getFilteredArray();
 
     var pinNumber = window.utils.getNumberFromString(evt.currentTarget.id);
     var newCard = window.createCard(currentApartmentsArray[pinNumber - 1], pinNumber);
