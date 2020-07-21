@@ -11,7 +11,9 @@
   var housingFeaturesFilter = filterForm.querySelector('.map__features');
 
   var mainPin = document.querySelector('.map__pin--main');
+
   var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('input[name="address"]');
 
   var defaultMainPinTop = window.utils.getElementProperties(mainPin).top;
   var defaultMainPinLeft = window.utils.getElementProperties(mainPin).left;
@@ -115,6 +117,9 @@
       openMap();
     }
   };
+
+  addressInput.value = window.mapPins.getPinAddress(mainPin, false);
+  window.adForm.deactivate();
 
   mainPin.addEventListener('mousedown', onMainPinMouseDown);
   mainPin.addEventListener('keydown', onMainPinKeyDown);

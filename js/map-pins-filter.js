@@ -2,22 +2,21 @@
 
 (function () {
   var DEFAULT = 'any';
-  var HOUSING_PRICES = {
-    low: {
-      value: 'low',
-      maxPrice: 10000
-    },
 
-    middle: {
-      value: 'middle',
-      minPrice: 10000,
-      maxPrice: 50000
-    },
+  var HOUSING_PRICES_LOW = {
+    value: 'low',
+    maxPrice: 10000
+  };
 
-    high: {
-      value: 'high',
-      minPrice: 50000,
-    }
+  var HOUSING_PRICES_MIDDLE = {
+    value: 'middle',
+    minPrice: 10000,
+    maxPrice: 50000
+  };
+
+  var HOUSING_PRICES_HIGH = {
+    value: 'high',
+    minPrice: 50000
   };
 
   var map = document.querySelector('.map');
@@ -34,14 +33,14 @@
 
   var filterByHousingPrice = function (value) {
     switch (housingPriceFilter.value) {
-      case HOUSING_PRICES.low.value:
-        return value.offer.price < HOUSING_PRICES.low.maxPrice;
+      case HOUSING_PRICES_LOW.value:
+        return value.offer.price < HOUSING_PRICES_LOW.maxPrice;
 
-      case HOUSING_PRICES.middle.value:
-        return value.offer.price >= HOUSING_PRICES.middle.minPrice && value.offer.price < HOUSING_PRICES.middle.maxPrice;
+      case HOUSING_PRICES_MIDDLE.value:
+        return value.offer.price >= HOUSING_PRICES_MIDDLE.minPrice && value.offer.price < HOUSING_PRICES_MIDDLE.maxPrice;
 
-      case HOUSING_PRICES.high.value:
-        return value.offer.price >= HOUSING_PRICES.high.minPrice;
+      case HOUSING_PRICES_HIGH.value:
+        return value.offer.price >= HOUSING_PRICES_HIGH.minPrice;
 
       default:
         return true;

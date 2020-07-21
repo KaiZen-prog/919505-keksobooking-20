@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var adForm = document.querySelector('.ad-form');
   var fieldsetCollection = adForm.querySelectorAll('fieldset');
   var roomsSelect = adForm.querySelector('#room_number');
@@ -11,6 +13,12 @@
   var timeOutSelect = adForm.querySelector('#timeout');
 
   var addressInput = adForm.querySelector('input[name="address"]');
+
+  var avatarChooser = adForm.querySelector('.ad-form__field input[type=file]');
+  var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
+
+  var apartmentPhotoChooser = adForm.querySelector('.ad-form__upload input[type=file]');
+  var apartmentPhotoPreview = adForm.querySelector('.ad-form__photo img');
 
   var mainPin = document.querySelector('.map__pin--main');
 
@@ -26,9 +34,9 @@
       fieldsetCollection[i].disabled = false;
     }
 
-    addressInput.value = window.mapPins.getPinAddress(mainPin, true);
-
     adForm.classList.remove('ad-form--disabled');
+
+    addressInput.value = window.mapPins.getPinAddress(mainPin, true);
 
     checkValidity();
 
@@ -37,6 +45,9 @@
     housingTypeSelect.addEventListener('change', onHousingTypeChange);
     timeInSelect.addEventListener('change', onTimeInChange);
     timeOutSelect.addEventListener('change', onTimeOutChange);
+
+    avatarChooser.addEventListener('change', onAvatarChange);
+    apartmentPhotoChooser.addEventListener('change', onApartmentPhotoChange);
   };
 
   // Перевод формы в неактивный режим
@@ -47,7 +58,9 @@
       fieldsetCollection[i].disabled = true;
     }
 
-    addressInput.value = '';
+    addressInput.value = window.mapPins.getPinAddress(mainPin, false);
+    avatarPreview.src = 'img/muffin-grey.svg';
+    apartmentPhotoPreview.src = 'img/muffin-grey.svg';
 
     adForm.classList.add('ad-form--disabled');
 
@@ -56,6 +69,9 @@
     housingTypeSelect.removeEventListener('change', onHousingTypeChange);
     timeInSelect.removeEventListener('change', onTimeInChange);
     timeOutSelect.removeEventListener('change', onTimeOutChange);
+
+    avatarChooser.removeEventListener('change', onAvatarChange);
+    apartmentPhotoChooser.removeEventListener('change', onApartmentPhotoChange);
   };
 
   // Валидация исходных значений полей формы
@@ -148,6 +164,34 @@
         }
       }
     }
+  };
+
+  // Обработка аватарки пользователя и фотографии жилья
+  var updateImg = function (fileChooser, preview) {
+    var file = fileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        preview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  var onAvatarChange = function () {
+    updateImg(avatarChooser, avatarPreview);
+  };
+
+  var onApartmentPhotoChange = function () {
+    updateImg(apartmentPhotoChooser, apartmentPhotoPreview);
   };
 
   // Обработчики сообщения об успешной отправке формы
