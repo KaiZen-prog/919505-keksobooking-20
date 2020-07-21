@@ -11,12 +11,16 @@
   var housingFeaturesFilter = filterForm.querySelector('.map__features');
 
   var mainPin = document.querySelector('.map__pin--main');
+
   var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('input[name="address"]');
 
   var defaultMainPinTop = window.utils.getElementProperties(mainPin).top;
   var defaultMainPinLeft = window.utils.getElementProperties(mainPin).left;
 
   var resetButton = document.querySelector('.ad-form__reset');
+
+  var isMapClosed = true;
 
   // Отправка формы
   var onFormSubmit = function (evt) {
@@ -81,6 +85,8 @@
     housingRoomsFilter.removeEventListener('change', onFilterChange);
     housingGuestsFilter.removeEventListener('change', onFilterChange);
     housingFeaturesFilter.removeEventListener('click', onFeaturesClick, true);
+
+    isMapClosed = true;
   };
 
   // Перевод страницы в активное состояние при нажатии на mainPin
@@ -100,13 +106,17 @@
     housingRoomsFilter.addEventListener('change', onFilterChange);
     housingGuestsFilter.addEventListener('change', onFilterChange);
     housingFeaturesFilter.addEventListener('click', onFeaturesClick);
+
+    isMapClosed = false;
   };
 
   var onMainPinMouseDown = function (evt) {
     if (window.utils.isLeftMouseDown(evt)) {
       window.onMainPinMousedown(evt);
 
-      openMap();
+      if (isMapClosed) {
+        openMap();
+      }
     }
   };
 
@@ -115,6 +125,9 @@
       openMap();
     }
   };
+
+  addressInput.value = window.mapPins.getPinAddress(mainPin, false);
+  window.adForm.deactivate();
 
   mainPin.addEventListener('mousedown', onMainPinMouseDown);
   mainPin.addEventListener('keydown', onMainPinKeyDown);
