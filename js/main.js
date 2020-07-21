@@ -126,7 +126,6 @@
     }
   };
 
-  window.adForm.setApartmentPhotoPreviewProperties();
   addressInput.value = window.mapPins.getPinAddress(mainPin, false);
   window.adForm.deactivate();
 

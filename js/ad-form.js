@@ -18,7 +18,6 @@
   var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
 
   var apartmentPhotoChooser = adForm.querySelector('.ad-form__upload input[type=file]');
-  var apartmentPhotoPreview = adForm.querySelector('.ad-form__photo img');
 
   var mainPin = document.querySelector('.map__pin--main');
 
@@ -27,6 +26,23 @@
 
   var errorPopupTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorPopup = errorPopupTemplate.cloneNode(true);
+
+  // Стилизация блока с фотографией жилья
+  var setApartmentPhotoBlock = function () {
+    var imgContainer = adForm.querySelector('.ad-form__photo');
+    imgContainer.style.position = 'relative';
+
+    var img = document.createElement('img');
+    img.style.position = 'absolute';
+    img.style.width = '100%';
+    img.style.height = '100%';
+
+    imgContainer.appendChild(img);
+
+    return img;
+  };
+
+  var apartmentPhotoPreview = setApartmentPhotoBlock();
 
   // Перевод формы в активный режим
   var activate = function () {
@@ -258,21 +274,11 @@
     document.addEventListener('click', onErrorPopupClick);
   };
 
-  // Стилизация блока с фотографией жилья для адекватного представления контента
-  var setApartmentPhotoPreviewProperties = function () {
-    adForm.querySelector('.ad-form__photo').style.position = 'relative';
-
-    apartmentPhotoPreview.style.position = 'absolute';
-    apartmentPhotoPreview.style.width = '100%';
-    apartmentPhotoPreview.style.height = '100%';
-  };
-
   window.adForm = {
     activate: activate,
     deactivate: deactivate,
     onHousingTypeChange: onHousingTypeChange,
     showSuccessMessage: showSuccessMessage,
-    showErrorMessage: showErrorMessage,
-    setApartmentPhotoPreviewProperties: setApartmentPhotoPreviewProperties
+    showErrorMessage: showErrorMessage
   };
 })();
