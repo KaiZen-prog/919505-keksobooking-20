@@ -20,6 +20,8 @@
 
   var resetButton = document.querySelector('.ad-form__reset');
 
+  var isMapClosed = true;
+
   // Отправка формы
   var onFormSubmit = function (evt) {
     evt.preventDefault();
@@ -83,6 +85,8 @@
     housingRoomsFilter.removeEventListener('change', onFilterChange);
     housingGuestsFilter.removeEventListener('change', onFilterChange);
     housingFeaturesFilter.removeEventListener('click', onFeaturesClick, true);
+
+    isMapClosed = true;
   };
 
   // Перевод страницы в активное состояние при нажатии на mainPin
@@ -102,13 +106,17 @@
     housingRoomsFilter.addEventListener('change', onFilterChange);
     housingGuestsFilter.addEventListener('change', onFilterChange);
     housingFeaturesFilter.addEventListener('click', onFeaturesClick);
+
+    isMapClosed = false;
   };
 
   var onMainPinMouseDown = function (evt) {
     if (window.utils.isLeftMouseDown(evt)) {
       window.onMainPinMousedown(evt);
 
-      openMap();
+      if (isMapClosed) {
+        openMap();
+      }
     }
   };
 
