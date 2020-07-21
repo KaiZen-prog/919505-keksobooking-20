@@ -258,11 +258,21 @@
     document.addEventListener('click', onErrorPopupClick);
   };
 
+  // Стилизация блока с фотографией жилья для адекватного представления контента
+  var setApartmentPhotoPreviewProperties = function () {
+    adForm.querySelector('.ad-form__photo').style.position = 'relative';
+
+    apartmentPhotoPreview.style.position = 'absolute';
+    apartmentPhotoPreview.style.width = '100%';
+    apartmentPhotoPreview.style.height = '100%';
+  };
+
   window.adForm = {
     activate: activate,
     deactivate: deactivate,
     onHousingTypeChange: onHousingTypeChange,
     showSuccessMessage: showSuccessMessage,
-    showErrorMessage: showErrorMessage
+    showErrorMessage: showErrorMessage,
+    setApartmentPhotoPreviewProperties: setApartmentPhotoPreviewProperties
   };
 })();
