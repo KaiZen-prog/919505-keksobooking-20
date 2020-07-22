@@ -87,6 +87,12 @@
     return evt.keyCode === KEY_CODE_ESCAPE;
   };
 
+  var toggleFormFields = function (fieldCollection, disableFields) {
+    for (var i = 0; i < fieldCollection.length; i++) {
+      fieldCollection[i].disabled = disableFields;
+    }
+  };
+
   window.utils = {
     getRandomArrayElement: getRandomArrayElement,
     getRandomNumber: getRandomNumber,
@@ -98,5 +104,6 @@
     isEnterDown: isEnterDown,
     isEscapeDown: isEscapeDown,
     getMinMaxTop: getMinMaxTop,
+    toggleFormFields: toggleFormFields
   };
 })();

@@ -2,6 +2,12 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var MIN_HOUSING_PRICES = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
 
   var adForm = document.querySelector('.ad-form');
   var fieldsetCollection = adForm.querySelectorAll('fieldset');
@@ -46,9 +52,7 @@
 
   // Перевод формы в активный режим
   var activate = function () {
-    for (var i = 0; i < fieldsetCollection.length; i++) {
-      fieldsetCollection[i].disabled = false;
-    }
+    window.utils.toggleFormFields(fieldsetCollection, false);
 
     adForm.classList.remove('ad-form--disabled');
 
@@ -70,9 +74,7 @@
   var deactivate = function () {
     adForm.reset();
 
-    for (var i = 0; i < fieldsetCollection.length; i++) {
-      fieldsetCollection[i].disabled = true;
-    }
+    window.utils.toggleFormFields(fieldsetCollection, true);
 
     addressInput.value = window.mapPins.getPinAddress(mainPin, false);
     avatarPreview.src = 'img/muffin-grey.svg';
@@ -102,23 +104,23 @@
 
     switch (housingType) {
       case 'bungalo':
-        priceInput.setAttribute('min', '0');
-        priceInput.setAttribute('placeholder', '0');
+        priceInput.setAttribute('min', MIN_HOUSING_PRICES.bungalo);
+        priceInput.setAttribute('placeholder', MIN_HOUSING_PRICES.bungalo);
         break;
 
       case 'flat':
-        priceInput.setAttribute('min', '1000');
-        priceInput.setAttribute('placeholder', '1000');
+        priceInput.setAttribute('min', MIN_HOUSING_PRICES.flat);
+        priceInput.setAttribute('placeholder', MIN_HOUSING_PRICES.flat);
         break;
 
       case 'house':
-        priceInput.setAttribute('min', '5000');
-        priceInput.setAttribute('placeholder', '5000');
+        priceInput.setAttribute('min', MIN_HOUSING_PRICES.house);
+        priceInput.setAttribute('placeholder', MIN_HOUSING_PRICES.house);
         break;
 
       case 'palace':
-        priceInput.setAttribute('min', '10000');
-        priceInput.setAttribute('placeholder', '10000');
+        priceInput.setAttribute('min', MIN_HOUSING_PRICES.palace);
+        priceInput.setAttribute('placeholder', MIN_HOUSING_PRICES.palace);
         break;
     }
   };

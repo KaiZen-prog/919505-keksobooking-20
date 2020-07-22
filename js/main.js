@@ -4,6 +4,8 @@
   var map = document.querySelector('.map');
 
   var filterForm = map.querySelector('form');
+  var filterFormInputCollection = filterForm.querySelectorAll('input');
+  var filterFormSelectCollection = filterForm.querySelectorAll('select');
   var housingTypeFilter = filterForm.querySelector('#housing-type');
   var housingPriceFilter = filterForm.querySelector('#housing-price');
   var housingRoomsFilter = filterForm.querySelector('#housing-rooms');
@@ -68,9 +70,11 @@
 
     map.classList.add('map--faded');
 
-    window.adForm.deactivate();
     filterForm.reset();
+    window.utils.toggleFormFields(filterFormInputCollection, true);
+    window.utils.toggleFormFields(filterFormSelectCollection, true);
 
+    window.adForm.deactivate();
     window.adForm.showSuccessMessage();
 
     mainPin.addEventListener('keydown', onMainPinKeyDown);
@@ -93,8 +97,12 @@
   var openMap = function () {
     window.load(window.onGetApartments, window.renderErrorPopup);
 
-    window.adForm.activate();
+    window.utils.toggleFormFields(filterFormInputCollection, false);
+    window.utils.toggleFormFields(filterFormSelectCollection, false);
+
     map.classList.remove('map--faded');
+
+    window.adForm.activate();
 
     adForm.addEventListener('submit', onFormSubmit);
 
@@ -128,6 +136,8 @@
 
   addressInput.value = window.mapPins.getPinAddress(mainPin, false);
   window.adForm.deactivate();
+  window.utils.toggleFormFields(filterFormInputCollection, true);
+  window.utils.toggleFormFields(filterFormSelectCollection, true);
 
   mainPin.addEventListener('mousedown', onMainPinMouseDown);
   mainPin.addEventListener('keydown', onMainPinKeyDown);
