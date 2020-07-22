@@ -112,9 +112,9 @@
       var imgCollection = photos.querySelectorAll('img');
 
       if (imgCollection) {
-        for (i = 0; i < imgCollection.length; i++) {
-          imgCollection[i].remove();
-        }
+        imgCollection.forEach(function (el) {
+          el.remove();
+        });
       }
 
       if (entity.offer.photos.length > 0) {

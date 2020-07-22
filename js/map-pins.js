@@ -91,9 +91,9 @@
     mapPins.appendChild(fragment);
 
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (i = 0; i < pins.length; i++) {
-      pins[i].addEventListener('click', onMapPinClick);
-    }
+    pins.forEach(function (el) {
+      el.addEventListener('click', onMapPinClick);
+    });
   };
 
   // Получаем адрес пина; как круглого, так и с острым концом
@@ -125,9 +125,9 @@
   // Удаляем все ранее сгенерированные пины
   var removePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].remove();
-    }
+    pins.forEach(function (el) {
+      el.remove();
+    });
   };
 
   window.mapPins = {

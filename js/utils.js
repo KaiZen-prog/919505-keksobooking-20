@@ -8,40 +8,6 @@
   window.PIN_MIN_Y = 130;
   window.PIN_MAX_Y = 630;
 
-  var getRandomArrayElement = function (array) {
-    var rand = Math.floor(Math.random() * array.length);
-    return array[rand];
-  };
-
-  var getRandomNumber = function (min, max) {
-    return Math.floor(min + Math.random() * (max + 1 - min));
-  };
-
-  var createRandomArray = function (array) {
-    var newArray = [];
-    var newArrayLength = getRandomNumber(0, array.length);
-    for (var i = 0; i < newArrayLength; i++) {
-      newArray.push(array[i]);
-    }
-    return newArray;
-  };
-
-  var getRandomArrayElementsCollection = function (array, newArrayLength) {
-    var newArray = [];
-    var bufferArray = array;
-
-    for (var i = 0; i < newArrayLength; i++) {
-      var randomElement = getRandomArrayElement(bufferArray);
-
-      newArray.push(randomElement);
-
-      var randomElementIndex = bufferArray.indexOf(randomElement);
-      bufferArray.splice(randomElementIndex, 1);
-    }
-
-    return newArray;
-  };
-
   var getElementProperties = function (element) {
     var elementWidth = window.getComputedStyle(element).width;
     var elementHeight = window.getComputedStyle(element).height;
@@ -88,16 +54,12 @@
   };
 
   var toggleFormFields = function (fieldCollection, disableFields) {
-    for (var i = 0; i < fieldCollection.length; i++) {
-      fieldCollection[i].disabled = disableFields;
-    }
+    fieldCollection.forEach(function (el) {
+      el.disabled = disableFields;
+    });
   };
 
   window.utils = {
-    getRandomArrayElement: getRandomArrayElement,
-    getRandomNumber: getRandomNumber,
-    createRandomArray: createRandomArray,
-    getRandomArrayElementsCollection: getRandomArrayElementsCollection,
     getElementProperties: getElementProperties,
     getNumberFromString: getNumberFromString,
     isLeftMouseDown: isLeftMouseDown,

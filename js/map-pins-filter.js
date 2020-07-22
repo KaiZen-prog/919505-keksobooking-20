@@ -62,9 +62,9 @@
     }
 
     var selectedFeatures = [];
-    for (var i = 0; i < inputs.length; i++) {
-      selectedFeatures.push(inputs[i].value);
-    }
+    inputs.forEach(function (el) {
+      selectedFeatures.push(el.value);
+    });
 
     var matchingFeatures = selectedFeatures.filter(function (feature) {
       return value.offer.features.indexOf(feature) > -1;
