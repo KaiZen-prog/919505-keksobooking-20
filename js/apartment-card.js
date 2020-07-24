@@ -60,11 +60,11 @@
 
       var listFragment = document.createDocumentFragment();
 
-      for (var i = 0; i < entity.offer.features.length; i++) {
+      entity.offer.features.forEach(function (el) {
         var listItem = document.createElement('li');
         listItem.classList.add('popup__feature');
 
-        switch (entity.offer.features[i]) {
+        switch (el) {
           case 'wifi':
             listItem.classList.add('popup__feature--wifi');
             break;
@@ -91,7 +91,7 @@
         }
 
         listFragment.appendChild(listItem);
-      }
+      });
 
       features.appendChild(listFragment);
     } else {
@@ -120,14 +120,15 @@
       if (entity.offer.photos.length > 0) {
         var photosFragment = document.createDocumentFragment();
 
-        for (var j = 0; j < entity.offer.photos.length; j++) {
+        entity.offer.photos.forEach(function (el) {
           var imgNode = img.cloneNode(true);
-          imgNode.src = entity.offer.photos[j];
+          imgNode.src = el;
           photosFragment.appendChild(imgNode);
-        }
+        });
 
         photos.appendChild(photosFragment);
       }
+
     } else {
       photos.remove();
       isPhotosRemoved = true;
